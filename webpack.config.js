@@ -7,7 +7,14 @@ module.exports = {
   context: path.resolve('src'),
 
   entry: {
-    app: './index.js',
+    'createjs-elements': './index.js',
+    'EaselJS': ['./CreateJS/EaselJS/index.js'],
+    'PreloadJS': ['./CreateJS/PreloadJS/index.js'],
+    'SoundJS': ['./CreateJS/SoundJS/index.js'],
+    'TweenJS': ['./CreateJS/TweenJS/index.js'],
+    'Elements': ['./Elements/index.js'],
+    'Sounds': ['./Sounds/index.js'],
+    'Translations': ['./Translations/index.js']
   },
 
   loader: {
@@ -18,7 +25,7 @@ module.exports = {
 
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: './createjs-elements.js',
+    filename: './[name].js',
     library: 'createjs-elements',
     libraryTarget: 'umd',
   },
