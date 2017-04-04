@@ -24,14 +24,14 @@ module.exports = {
   },
 
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.join(__dirname),
     filename: './[name].js',
     library: 'createjs-elements',
     libraryTarget: 'umd',
   },
 
   plugins: [
-    new CleanWebpackPlugin(['dist', 'build']),
+    new CleanWebpackPlugin(['build']),
     new webpack.optimize.OccurrenceOrderPlugin,
     new webpack.optimize.UglifyJsPlugin,
   ],

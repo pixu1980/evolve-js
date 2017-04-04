@@ -1,8 +1,8 @@
 {
   "name": "createjs-elements",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "CreateJS-Elements An Elements framework built over CreateJS",
-  "main": "dist/createjs-elements.js",
+  "main": "createjs-elements.js",
   "scripts": {
     "build": "webpack"
   },
