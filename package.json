@@ -1,6 +1,6 @@
 {
   "name": "createjs-elements",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "CreateJS-Elements An Elements framework built over CreateJS",
   "main": "dist/createjs-elements.js",
   "scripts": {
@@ -53,6 +53,7 @@
     "exports-loader": "^0.6.3",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
+    "flavor-js": "^0.2.3",
     "imports-loader": "^0.6.5",
     "lodash-webpack-plugin": "^0.11.2",
     "webpack": "^1.14.0",

@@ -6,9 +6,10 @@ const config = require('./config.js');
 
 module.exports = {
   context: path.resolve('src'),
-  //devtool: '#inline-source-map',
+
   devtool: 'source-map',
   debug: true,
+
   entry: {
     app: './index.js',
   },
@@ -24,7 +25,6 @@ module.exports = {
     filename: './createjs-elements.js',
     library: 'createjs-elements',
     libraryTarget: 'umd',
-    //sourceMapFilename: '[file].map',
   },
 
   plugins: [
