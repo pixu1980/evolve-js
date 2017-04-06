@@ -38,28 +38,26 @@ module.exports = {
     new webpack.optimize.OccurrenceOrderPlugin,
     new webpack.optimize.UglifyJsPlugin({
       mangle: true,
+      minimize: true,
+      sourceMap: true,
       compress: {
+        warnings: false,
+        screw_ie8: true,
+        conditionals: true,
+        unused: true,
+        comparisons: true,
+        sequences: true,
+        dead_code: true,
+        evaluate: true,
+        if_return: true,
+        join_vars: true,
         global_defs: {
-          DEBUG: false
+          DEBUG: false,
         }
-      }
-      //minimize: true,
-      //compress: {
-      //  warnings: false,
-        //screw_ie8: true,
-        //conditionals: true,
-        //unused: true,
-        //comparisons: true,
-        //sequences: true,
-        //dead_code: true,
-        //evaluate: true,
-        //if_return: true,
-        //join_vars: true
-      //},
-      //output: {
-      //  comments: false
-      //},
-      //sourceMap: true
+      },
+      output: {
+        comments: false,
+      },
     }),
   ],
 
