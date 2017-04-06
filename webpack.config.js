@@ -6,7 +6,9 @@ const config = require('./config.js');
 
 module.exports = {
   context: path.resolve('src'),
-
+  //devtool: '#inline-source-map',
+  devtool: 'source-map',
+  debug: true,
   entry: {
     app: './index.js',
   },
@@ -22,36 +24,56 @@ module.exports = {
     filename: './createjs-elements.js',
     library: 'createjs-elements',
     libraryTarget: 'umd',
+    //sourceMapFilename: '[file].map',
   },
 
   plugins: [
     new CleanWebpackPlugin(['dist', 'build']),
     //new webpack.IgnorePlugin(/lodash/),
+    new webpack.ProvidePlugin({
+      _: 'lodash',
+      ƒ: 'flavor-js',
+      'createjs-browserify': 'createjs-browserify',
+    }),
     new webpack.optimize.OccurrenceOrderPlugin,
-    new webpack.optimize.UglifyJsPlugin,
+    new webpack.optimize.UglifyJsPlugin({
+      minimize: true,
+      compress: {
+        warnings: false,
+        screw_ie8: true,
+        conditionals: true,
+        unused: true,
+        comparisons: true,
+        sequences: true,
+        dead_code: true,
+        evaluate: true,
+        if_return: true,
+        join_vars: true
+      },
+      output: {
+        comments: false
+      },
+      sourceMap: true
+    }),
   ],
 
   module: {
-    preLoaders: [
-      {
-        test: /\.js$/,
-        loader: 'eslint-loader',
-        exclude: /node_modules|bower_components/,
-      },
-    ],
-    loaders: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules|bower_components/,
-        loader: 'babel-loader',
-        'query': {
-          'presets': [['env', {
-            'modules': false,
-            'targets': {'node': 4}
-          }]]
-        }
-      },
-    ],
+    preLoaders: [{
+      test: /\.js$/,
+      loader: 'eslint-loader',
+      exclude: /node_modules|bower_components/,
+    }],
+    loaders: [{
+      test: /\.js$/,
+      exclude: /node_modules|bower_components/,
+      loader: 'babel-loader',
+      'query': {
+        'presets': [['env', {
+          'modules': false,
+          'targets': {'node': 4}
+        }]]
+      }
+    }],
   },
 
   externals: packageJSON.peerDependencies ? Object.keys(packageJSON.peerDependencies) : [],

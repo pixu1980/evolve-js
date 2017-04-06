@@ -1,7 +1,5 @@
-/* eslint-disable import/no-extraneous-dependencies, import/extensions, import/no-unresolved */
 import Element from './Element';
 import LabelElement from './LabelElement';
-/* eslint-enable import/no-extraneous-dependencies, import/extensions, import/no-unresolved */
 
 /**
  * constructs a BoxElement instance

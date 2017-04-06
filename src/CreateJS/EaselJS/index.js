@@ -1,6 +1,4 @@
-/* eslint-disable import/no-extraneous-dependencies, import/extensions, import/no-unresolved */
 import createjs from 'createjs-browserify';
-/* eslint-enable import/no-extraneous-dependencies, import/extensions, import/no-unresolved */
 
 ((global, factory) => {
   if(typeof module === 'object' && typeof module.exports === 'object') {
@@ -22,8 +20,6 @@ import createjs from 'createjs-browserify';
   }
   // Pass this if window is not defined yet
 })(typeof window !== 'undefined' ? window : this, (window) => {
-  console.log('EaselJS v' + createjs.EaselJS.version + ' - build ' + createjs.EaselJS.buildDate);
-
   return {
     AlphaMapFilter: createjs.AlphaMapFilter,
     AlphaMaskFilter: createjs.AlphaMaskFilter,

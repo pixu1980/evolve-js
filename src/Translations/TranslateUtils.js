@@ -1,6 +1,4 @@
-/* eslint-disable import/no-extraneous-dependencies, import/extensions, import/no-unresolved */
 import _ from 'lodash';
-/* eslint-enable import/no-extraneous-dependencies, import/extensions, import/no-unresolved */
 
 export default class TranslateUtils {
   /**
