@@ -2,19 +2,13 @@ const path = require('path');
 const webpack = require('webpack');
 const packageJSON = require('./package.json');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const config = require('./config.js');
 
 module.exports = {
   context: path.resolve('src'),
 
   entry: {
-    'createjs-elements': './index.js',
-    'EaselJS': ['./CreateJS/EaselJS/index.js'],
-    'PreloadJS': ['./CreateJS/PreloadJS/index.js'],
-    'SoundJS': ['./CreateJS/SoundJS/index.js'],
-    'TweenJS': ['./CreateJS/TweenJS/index.js'],
-    'Elements': ['./Elements/index.js'],
-    'Sounds': ['./Sounds/index.js'],
-    'Translations': ['./Translations/index.js']
+    app: './index.js',
   },
 
   loader: {
@@ -24,14 +18,15 @@ module.exports = {
   },
 
   output: {
-    path: path.join(__dirname),
-    filename: './[name].js',
+    path: path.join(__dirname, 'dist'),
+    filename: './createjs-elements.js',
     library: 'createjs-elements',
     libraryTarget: 'umd',
   },
 
   plugins: [
-    new CleanWebpackPlugin(['build']),
+    new CleanWebpackPlugin(['dist', 'build']),
+    //new webpack.IgnorePlugin(/lodash/),
     new webpack.optimize.OccurrenceOrderPlugin,
     new webpack.optimize.UglifyJsPlugin,
   ],
@@ -49,15 +44,11 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules|bower_components/,
         loader: 'babel-loader',
-        query: {
-          presets: [
-            ['env', {
-              modules: false,
-              targets: {
-                node: 4
-              }
-            }]
-          ]
+        'query': {
+          'presets': [['env', {
+            'modules': false,
+            'targets': {'node': 4}
+          }]]
         }
       },
     ],
