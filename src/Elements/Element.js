@@ -1,4 +1,4 @@
-import {Container, Shadow} from '../CreateJS/EaselJS';
+import {Container, Shadow, Shape} from '../CreateJS/EaselJS';
 import ElementHelpers from './ElementHelpers';
 
 /**
@@ -161,16 +161,22 @@ export default class Element extends Container {
     this.setShadow(this.settings.shadow);
 
     if(!!this.settings.mask) {
-      if(Boolean.isBoolean(this.settings.mask)) {
-        this.maskBounds = [0, 0, this.settings.size.width * this.settings.scale.x + 16, this.settings.size.height * this.settings.scale.y + 16];
+
+      if(this.settings.mask instanceof Shape || this.settings.mask instanceof Container) {
+        this.mask = this.settings.mask;
+      } else {
+        this.maskBounds = [0, 0, this.settings.size.width * this.settings.scale.x, this.settings.size.height * this.settings.scale.y];
+
+        if(Number.isNumber(this.settings.mask)) {
+          this.maskBounds = [0, 0, this.settings.size.width * this.settings.scale.x * this.settings.mask, this.settings.size.height * this.settings.scale.y * this.settings.mask];
+        }
+
         this.maskShape = ElementHelpers.createRect(this.settings.pick(['fill', 'stroke']), ...this.maskBounds);
 
         this.mask = this.maskShape.inherit({
           x: this.x,
           y: this.y,
         });
-      } else {
-        this.mask = this.settings.mask;
       }
     }
   }
