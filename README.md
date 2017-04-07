@@ -1,4 +1,4 @@
 # createjs-elements
 An Elements framework built over CreateJS
 
-v0.1.1
+v0.1.3

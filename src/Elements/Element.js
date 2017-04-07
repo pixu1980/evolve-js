@@ -175,8 +175,8 @@ export default class Element extends Container {
         }
 
         this.mask = this.maskShape.inherit({
-          x: this.x,
-          y: this.y,
+          x: this.bounds[2] * 0.5 - this.maskBounds[2] * 0.5,
+          y: this.bounds[3] * 0.5 - this.maskBounds[3] * 0.5,
         });
       }
 
