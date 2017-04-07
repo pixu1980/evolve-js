@@ -5,7 +5,7 @@ import ElementHelpers from './ElementHelpers';
  * constructs an Element instance
  * @class Element
  * @classdesc Element Class
- * @extends Container
+ //* @extends Container
  * @param {Object} options the options object to be merged with defaults
  * @type {Element}
  * @public
@@ -161,22 +161,29 @@ export default class Element extends Container {
     this.setShadow(this.settings.shadow);
 
     if(!!this.settings.mask) {
+      this.maskShape = this.settings.mask;
 
-      if(this.settings.mask instanceof Shape || this.settings.mask instanceof Container) {
-        this.mask = this.settings.mask;
-      } else {
+      if(!(this.settings.mask instanceof Shape) && !(this.settings.mask instanceof Container)) {
         this.maskBounds = [0, 0, this.settings.size.width * this.settings.scale.x, this.settings.size.height * this.settings.scale.y];
 
-        if(Number.isNumber(this.settings.mask)) {
+        if(Object.isObject(this.settings.mask)) {
+          this.maskBounds = [0, 0, this.settings.size.width * this.settings.scale.x * this.settings.mask.scale, this.settings.size.height * this.settings.scale.y * this.settings.mask.scale];
+          this.maskShape = ElementHelpers.createRect(this.settings.mask.pick(['fill', 'stroke']), ...this.maskBounds);
+        } else if(Number.isNumber(this.settings.mask)) {
           this.maskBounds = [0, 0, this.settings.size.width * this.settings.scale.x * this.settings.mask, this.settings.size.height * this.settings.scale.y * this.settings.mask];
+          this.maskShape = ElementHelpers.createRect(this.settings.pick(['fill', 'stroke']), ...this.maskBounds);
         }
-
-        this.maskShape = ElementHelpers.createRect(this.settings.pick(['fill', 'stroke']), ...this.maskBounds);
 
         this.mask = this.maskShape.inherit({
           x: this.x,
           y: this.y,
         });
+      }
+
+      if(!!this.settings.debug) {
+        this.addChild(this.maskShape);
+      } else {
+        this.mask = this.maskShape;
       }
     }
   }
@@ -428,5 +435,6 @@ export default class Element extends Container {
    * @method init
    * @instance
    */
-  init() {}
+  init() {
+  }
 }
