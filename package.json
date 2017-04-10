@@ -1,14 +1,14 @@
 {
-  "name": "createjs-elements",
-  "version": "0.1.3",
-  "description": "CreateJS-Elements An Elements framework built over CreateJS",
-  "main": "dist/createjs-elements.js",
+  "name": "elements-js",
+  "version": "0.1.4",
+  "description": "ElementsJS An Elements framework built over CreateJS",
+  "main": "dist/elements-js.js",
   "scripts": {
     "build": "webpack"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/blackmirror1980/createjs-elements.git"
+    "url": "git+https://github.com/blackmirror1980/elements-js.git"
   },
   "keywords": [
     "createjs",
@@ -20,9 +20,9 @@
   "author": "Black Mirror",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/blackmirror1980/createjs-elements/issues"
+    "url": "https://github.com/blackmirror1980/elements-js/issues"
   },
-  "homepage": "https://github.com/blackmirror1980/createjs-elements#readme",
+  "homepage": "https://github.com/blackmirror1980/elements-js#readme",
   "dependencies": {
     "createjs-browserify": "^1.0.5",
     "flavor-js": "^0.2.4",

@@ -4,7 +4,7 @@ import SoundManager from './SoundManager';
 ((global, factory) => {
   if(typeof module === 'object' && typeof module.exports === 'object') {
     // For CommonJS and CommonJS-like environments where a proper `window`
-    // is present, execute the factory and get CreateJS-Elements.
+    // is present, execute the factory and get ElementsJS.
     // For environments that do not have a `window` with a `document`
     // (such as Node.js), expose a factory as module.exports.
     // This accentuates the need for the creation of a real `window`.
@@ -12,7 +12,7 @@ import SoundManager from './SoundManager';
       factory(global, true) :
       (w) => {
         if(!w.document) {
-          throw new Error('CreateJS-Elements requires a window with a document');
+          throw new Error('ElementsJS requires a window with a document');
         }
         return factory(w);
       };

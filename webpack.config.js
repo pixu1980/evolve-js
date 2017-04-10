@@ -22,8 +22,8 @@ module.exports = {
 
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: './createjs-elements.js',
-    library: 'createjs-elements',
+    filename: './elements-js.js',
+    library: 'elements-js',
     libraryTarget: 'umd',
   },
 
