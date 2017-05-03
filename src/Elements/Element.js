@@ -19,15 +19,7 @@ export default class Element extends Container {
 
     this.initData();
 
-    if (this.settings.parent) {
-      this.settings.parent.addChild(this);
-    }
-
     this.drawElement();
-
-    if (!!this.settings.align) {
-      this.align(null, this.settings.align);
-    }
 
     this.bindEvents();
 
@@ -113,6 +105,11 @@ export default class Element extends Container {
   preDrawElements() {
     this.setScale(this.settings.scale);
     this.setComputedBounds(this.settings.size);
+    this.setReg();
+
+    if (this.settings.parent) {
+      this.settings.parent.addChild(this);
+    }
   }
 
   drawBackgroundElements() {
@@ -140,9 +137,11 @@ export default class Element extends Container {
   }
 
   postDrawElements() {
-    this.setBounds(...this.bounds);
-    this.setReg();
-    this.setPosition(this.settings.position);
+    if (!!this.settings.align) {
+      this.align(null, this.settings.align);
+    } else {
+      this.setPosition(this.settings.position);
+    }
   }
 
   /**
@@ -300,6 +299,7 @@ export default class Element extends Container {
       }
 
       this.bounds = [0, 0, this.settings.size.width * this.settings.scale.x, this.settings.size.height * this.settings.scale.y];
+      this.setBounds(...this.bounds);
     }
 
     return this;
@@ -486,7 +486,7 @@ export default class Element extends Container {
       position,
     });
 
-    this.inherit(position);
+    this.setPosition(null, true);
 
     return this;
   }
