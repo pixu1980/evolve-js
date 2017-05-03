@@ -115,7 +115,7 @@ export default class Element extends Container {
     this.setComputedBounds(this.settings.size);
   }
 
-  drawBackgroundElement() {
+  drawBackgroundElements() {
     this.background = ElementHelpers.createRect(this.settings.pick(['fill', 'stroke']), ...this.bounds);
     this.addChild(this.background);
   }
@@ -139,7 +139,7 @@ export default class Element extends Container {
     }
   }
 
-  postDrawElement() {
+  postDrawElements() {
     this.setBounds(...this.bounds);
     this.setReg();
     this.setPosition(this.settings.position);
