@@ -104,12 +104,13 @@ export default class Element extends Container {
 
   preDrawElements() {
     this.setScale(this.settings.scale);
-    this.setComputedBounds(this.settings.size);
-    this.setReg();
 
     if (this.settings.parent) {
       this.settings.parent.addChild(this);
     }
+
+    this.setComputedBounds(this.settings.size);
+    this.setReg();
   }
 
   drawBackgroundElements() {
