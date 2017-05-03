@@ -72,6 +72,13 @@ export default class ListElement extends Element {
     }
   }
 
+  preDrawElements() {
+    this.computeBounds();
+
+    super.preDrawElements();
+  }
+
+
   /**
    * draws all graphic elements of the ListElement instance, cycles the items, draw them and computes positions
    * @memberOf ListElement
@@ -80,8 +87,6 @@ export default class ListElement extends Element {
    * @override
    */
   drawElements() {
-    this.computeBounds();
-
     super.drawElements();
 
     this.settings.path('items', []).each((item, i) => {

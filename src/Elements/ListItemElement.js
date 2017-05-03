@@ -57,8 +57,6 @@ export default class ListItemElement extends ButtonElement {
       this.settings.lineHeight = this.indicator.getComputedBounds().height;
     }
 
-    super.drawElements();
-
     this.alignText('left middle');
     this.setTextPosition({
       x: this.indicator.getComputedBounds().right + 10,

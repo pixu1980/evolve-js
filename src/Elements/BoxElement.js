@@ -52,10 +52,6 @@ export default class BoxElement extends Element {
    * @override
    */
   drawElements() {
-    if(!this.settings.debug) {
-      super.drawElements();
-    }
-
     if(!!this.settings.title) {
       this.titleElement = new LabelElement(this.settings.title.inherit({
         parent: this,
@@ -70,10 +66,6 @@ export default class BoxElement extends Element {
         height: this.settings.size.height - (!!this.settings.title ? this.titleElement.getComputedBounds().height : 0),
       },
     }));
-
-    if(!!this.settings.debug) {
-      super.drawElements();
-    }
   }
 
   /**

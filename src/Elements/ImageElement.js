@@ -29,35 +29,25 @@ export default class ImageElement extends Element {
   }
 
   /**
-   * sets the scale factor for ImageElement instance
-   * @memberOf ImageElement
+   * sets or updates the scaling of the Element instance
+   * @memberOf Element
    * @method setScale
    * @instance
-   * @param {Number|Object} scaleOptions can be a Number (it will be used for both scaleX and scaleY attributes)<br>
-   *   can be an Object containing
-   * @param {Number} scaleOptions.x the scaleX factor for the ImageElement
-   * @param {Number} scaleOptions.y the scaleY factor for the ImageElement
-   * @return {ImageElement}
+   * @param {Object|Number} scaleOptions can be an object with x and y couple or only a number to be used for both
+   * @return {Element} to make chainable the method
    */
-  setScale(scaleOptions = {x: 1, y: 1}) {
-    super.setScale(scaleOptions);
+  setScale(scaleOptions = null, force = false) {
+    super.setScale(scaleOptions, force);
 
     this.image.inherit({
-      scaleX: this.settings.scale.x,
-      scaleY: this.settings.scale.y,
+      scaleX: this.scaleX,
+      scaleY: this.scaleY,
     });
 
     return this;
   }
 
-  /**
-   * draws all graphic elements of the ImageElement instance
-   * @memberOf ImageElement
-   * @method drawElements
-   * @instance
-   * @override
-   */
-  drawElements() {
+  preDrawElements() {
     this.image = ElementHelpers.createImage(this.settings.image);
     this.imageBounds = this.image.getBounds();
 
@@ -68,18 +58,22 @@ export default class ImageElement extends Element {
           height: this.imageBounds.height,
         },
       });
-    } else {
-      ElementHelpers.align(this.image, null, 'center middle', true);
     }
 
-    if(!this.settings.debug) {
-      super.drawElements();
-    }
+    super.preDrawElements();
+  }
+
+  /**
+   * draws all graphic elements of the ImageElement instance
+   * @memberOf ImageElement
+   * @method drawElements
+   * @instance
+   * @override
+   */
+  drawElements() {
+    super.drawElements();
 
     this.addChild(this.image);
-
-    if(!!this.settings.debug) {
-      super.drawElements();
-    }
+    ElementHelpers.align(this.image, null, 'center middle', true);
   }
 }

@@ -35,15 +35,4 @@ export default class ButtonElement extends LabelElement {
       },
     }.inherit(defaults));
   }
-
-  /**
-   * drawElements method implementation
-   * @memberOf BoxElement
-   * @method drawElements
-   * @instance
-   * @override
-   */
-  drawElements() {
-    super.drawElements();
-  }
 }

@@ -29,25 +29,39 @@ export default class SpriteElement extends Element {
   }
 
   /**
-   * sets the scale factor for SpriteElement instance
-   * @memberOf SpriteElement
+   * sets or updates the scaling of the Element instance
+   * @memberOf Element
    * @method setScale
    * @instance
-   * @param {Number|Object} scaleOptions can be a Number (it will be used for both scaleX and scaleY attributes)<br>
-   *   can be an Object containing
-   * @param {Number} scaleOptions.x the scaleX factor for the SpriteElement
-   * @param {Number} scaleOptions.y the scaleY factor for the SpriteElement
-   * @return {SpriteElement}
+   * @param {Object|Number} scaleOptions can be an object with x and y couple or only a number to be used for both
+   * @return {Element} to make chainable the method
    */
-  setScale(scaleOptions = {x: 1, y: 1}) {
-    super.setScale(scaleOptions);
+  setScale(scaleOptions = null, force = false) {
+    super.setScale(scaleOptions, force);
 
     this.sprite.inherit({
-      scaleX: this.settings.scale.x,
-      scaleY: this.settings.scale.y,
+      scaleX: this.scaleX,
+      scaleY: this.scaleY,
     });
+
+    return this;
   }
 
+  preDrawElements() {
+    this.sprite = ElementHelpers.createSprite(this.settings.spritesheet);
+    this.spriteBounds = this.sprite.getBounds();
+
+    if (!this.settings.size.force) {
+      this.settings.inherit({
+        size: {
+          width: this.spriteBounds.width,
+          height: this.spriteBounds.height,
+        },
+      });
+    }
+
+    super.preDrawElements();
+  }
   /**
    * draws all graphic elements of the SpriteElement instance
    * @memberOf SpriteElement
@@ -56,29 +70,10 @@ export default class SpriteElement extends Element {
    * @override
    */
   drawElements() {
-    this.sprite = ElementHelpers.createSprite(this.settings.spritesheet);
-    this.spriteBounds = this.sprite.getBounds();
-
-    if(!this.settings.size.force) {
-      this.settings.inherit({
-        size: {
-          width: this.spriteBounds.width,
-          height: this.spriteBounds.height,
-        },
-      });
-    } else {
-      ElementHelpers.align(this.sprite, null, 'center middle', true);
-    }
-
-    if(!this.settings.debug) {
-      super.drawElements();
-    }
-
+    super.drawElements();
+    
     this.addChild(this.sprite);
-
-    if(!!this.settings.debug) {
-      super.drawElements();
-    }
+    ElementHelpers.align(this.sprite, null, 'center middle', true);
   }
 
   /**
@@ -92,10 +87,10 @@ export default class SpriteElement extends Element {
    * @return {SpriteElement}
    */
   animate(options = null) {
-    if(Object.isObject(options)) {
-      if(!!options.animationName) {
-        if(!!options.onAnimationEnd) {
-          if(Function.isFunction(options.onAnimationEnd)) {
+    if (Object.isObject(options)) {
+      if (!!options.animationName) {
+        if (!!options.onAnimationEnd) {
+          if (Function.isFunction(options.onAnimationEnd)) {
             this.sprite.on('animationend', options.onAnimationEnd);
           }
         }

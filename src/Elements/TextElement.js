@@ -111,26 +111,9 @@ export default class TextElement extends Element {
     });
   }
 
-  /**
-   * draws all graphic elements of the TextElement instance
-   * @memberOf TextElement
-   * @method drawElements
-   * @instance
-   * @override
-   */
-  drawElements() {
+  preDrawElements() {
     if(!!this.settings.outline) {
-      this.textOutline = ElementHelpers.createText(this.settings.text, this.settings.font, this.settings.outline.color);
-      this.addChild(this.textOutline);
-      this.setChildIndex(this.textOutline, 1);
-    }
-
-    this.text = ElementHelpers.createText(this.settings.text, this.settings.font, this.settings.color);
-    this.addChild(this.text);
-    this.setChildIndex(this.text, (!!this.settings.outline ? 2 : 1));
-
-    if(!!this.settings.outline) {
-      this.textOutline.inherit({
+      this.textOutline = ElementHelpers.createText(this.settings.text, this.settings.font, this.settings.outline.color).inherit({
         textAlign: 'center',
         textBaseline: 'middle',
         lineHeight: this.settings.lineHeight || null,
@@ -140,7 +123,7 @@ export default class TextElement extends Element {
       });
     }
 
-    this.text.inherit({
+    this.text = ElementHelpers.createText(this.settings.text, this.settings.font, this.settings.color).inherit({
       textAlign: 'center',
       textBaseline: 'middle',
       lineHeight: this.settings.lineHeight || null,
@@ -151,7 +134,27 @@ export default class TextElement extends Element {
     this.computeBounds();
     this.centerText();
 
+    super.preDrawElements();
+  }
+
+
+  /**
+   * draws all graphic elements of the TextElement instance
+   * @memberOf TextElement
+   * @method drawElements
+   * @instance
+   * @override
+   */
+  drawElements() {
     super.drawElements();
+
+    if(!!this.settings.outline) {
+      this.addChild(this.textOutline);
+      this.setChildIndex(this.textOutline, 1);
+    }
+
+    this.addChild(this.text);
+    this.setChildIndex(this.text, (!!this.settings.outline ? 2 : 1));
   }
 
   /**
