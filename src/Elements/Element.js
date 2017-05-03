@@ -23,7 +23,7 @@ export default class Element extends Container {
       this.settings.parent.addChild(this);
     }
 
-    this.draw();
+    this.drawElement();
 
     if (!!this.settings.align) {
       this.align(null, this.settings.align);
@@ -151,9 +151,7 @@ export default class Element extends Container {
    * @method draw
    * @instance
    */
-  draw() {
-    super.draw();
-
+  drawElement() {
     this.preDrawElements();
 
     this.drawBackgroundElements();
