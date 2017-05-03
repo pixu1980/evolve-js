@@ -278,12 +278,7 @@ export default class Element extends Container {
     }
 
     if (!this.bounds && !!this.settings.size) {
-      if (String.isPercentage(this.settings.size)) {
-        this.settings.size = {
-          width: '100%',
-          height: '100%',
-        };
-      } else if (Number.isNumber(this.settings.size)) {
+      if (String.isPercentage(this.settings.size) || Number.isNumber(this.settings.size)) {
         this.settings.size = {
           width: this.settings.size,
           height: this.settings.size,
