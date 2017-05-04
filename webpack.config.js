@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const packageJSON = require('./package.json');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const config = require('./config.js');
+const release = require('./release.js');
 
 module.exports = {
   context: path.resolve('src'),
@@ -22,19 +22,19 @@ module.exports = {
 
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: './elements-js.js',
-    library: 'elements-js',
+    filename: './evolve.js',
+    library: 'evolve-js',
     libraryTarget: 'umd',
   },
 
   plugins: [
     new CleanWebpackPlugin(['dist', 'build']),
     //new webpack.IgnorePlugin(/lodash/),
-    new webpack.ProvidePlugin({
-      _: 'lodash',
-      ƒ: 'flavor-js',
-      'createjs-browserify': 'createjs-browserify',
-    }),
+    // new webpack.ProvidePlugin({
+    //   _: 'lodash',
+    //   ƒ: 'flavor-js',
+    //   createjs: 'create-es6-js',
+    // }),
     new webpack.optimize.OccurrenceOrderPlugin,
     new webpack.optimize.UglifyJsPlugin({
       mangle: true,

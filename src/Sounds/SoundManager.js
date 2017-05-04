@@ -1,4 +1,4 @@
-import {Ticker, Sound} from '../CreateJS/SoundJS';
+import {Sound as SoundJS} from 'create-es6-js';
 import SoundElement from './SoundElement';
 
 export default class SoundManager {
@@ -11,7 +11,7 @@ export default class SoundManager {
     console.log('adding layer ', props);
     const instance = new SoundElement(props);
     SoundManager._instances = [];
-    Ticker.addEventListener('tick', SoundManager.handleSoundTick);
+    SoundJS.Ticker.addEventListener('tick', SoundManager.handleSoundTick);
     SoundManager.addLayer(instance);
 
     instance.instance.on('complete', () => {
@@ -62,10 +62,10 @@ export default class SoundManager {
   }
 
   static mute() {
-    Sound.muted = true;
+    SoundJS.Sound.muted = true;
   }
 
   static unmute() {
-    Sound.muted = false;
+    SoundJS.Sound.muted = false;
   }
 }

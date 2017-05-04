@@ -1,14 +1,10 @@
-import createjs from 'createjs-browserify';
+import {Easel, Tween, Preload, Sound} from 'create-es6-js';
 
-import EaselJS from './CreateJS/EaselJS';
-import PreloadJS from './CreateJS/PreloadJS';
-import SoundJS from './CreateJS/SoundJS';
-import TweenJS from './CreateJS/TweenJS';
 import Elements from './Elements';
 import Translations from './Translations';
 import Sounds from './Sounds';
 
-import config from '../config';
+import release from '../release';
 
 ((global, factory) => {
   if(typeof module === 'object' && typeof module.exports === 'object') {
@@ -30,26 +26,22 @@ import config from '../config';
   }
   // Pass this if window is not defined yet
 })(typeof window !== 'undefined' ? window : this, (window) => {
-  const elementsJSStatus = {
+  const status = {
     initialized: true,
-    version: config.version,
-    build: config.build,
-    EaselJS: 'EaselJS v' + createjs.EaselJS.version + ' - build ' + createjs.EaselJS.buildDate,
-    TweenJS: 'TweenJS v' + createjs.TweenJS.version + ' - build ' + createjs.TweenJS.buildDate,
-    PreloadJS: 'PreloadJS v' + createjs.PreloadJS.version + ' - build ' + createjs.PreloadJS.buildDate,
-    SoundJS: 'SoundJS v' + createjs.SoundJS.version + ' - build ' + createjs.SoundJS.buildDate,
+    version: release.version,
+    build: release.build,
   };
 
-  console.log('ElementsJS initialized', elementsJSStatus);
+  console.log('EvolveJS initialized', status);
 
   return {
-    EaselJS,
-    PreloadJS,
-    SoundJS,
-    TweenJS,
+    Easel,
+    Preload,
+    Sound,
+    Tween,
     Elements,
     Translations,
     Sounds,
-    status: elementsJSStatus,
+    status,
   };
 });
