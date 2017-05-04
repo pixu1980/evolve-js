@@ -1,6 +1,6 @@
 {
   "name": "evolve-js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "EvolveJS An Elements framework built over CreateJS",
   "main": "dist/evolve.js",
   "scripts": {

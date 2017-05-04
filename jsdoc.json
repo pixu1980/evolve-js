@@ -12,7 +12,7 @@
     "templates": {
         "cleverLinks": false,
         "monospaceLinks": true,
-        "systemName": "ElementsJS",
+        "systemName": "EvolveJS",
         "footer": "",
         "copyright": "2017 &copy; Created by blackmirror1980",
         "navType": "vertical",

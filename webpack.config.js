@@ -29,12 +29,6 @@ module.exports = {
 
   plugins: [
     new CleanWebpackPlugin(['dist', 'build']),
-    //new webpack.IgnorePlugin(/lodash/),
-    // new webpack.ProvidePlugin({
-    //   _: 'lodash',
-    //   ƒ: 'flavor-js',
-    //   createjs: 'create-es6-js',
-    // }),
     new webpack.optimize.OccurrenceOrderPlugin,
     new webpack.optimize.UglifyJsPlugin({
       mangle: true,
