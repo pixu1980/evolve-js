@@ -29,30 +29,35 @@ module.exports = {
 
   plugins: [
     new CleanWebpackPlugin(['dist', 'build']),
-    new webpack.optimize.OccurrenceOrderPlugin,
-    new webpack.optimize.UglifyJsPlugin({
-      mangle: true,
-      minimize: true,
-      sourceMap: true,
-      compress: {
-        warnings: false,
-        screw_ie8: true,
-        conditionals: true,
-        unused: true,
-        comparisons: true,
-        sequences: true,
-        dead_code: true,
-        evaluate: true,
-        if_return: true,
-        join_vars: true,
-        global_defs: {
-          DEBUG: false,
-        }
-      },
-      output: {
-        comments: false,
-      },
+    new webpack.ProvidePlugin({
+      _: 'lodash',
+      ƒ: 'flavor-js',
+      createjs: 'create-es6-js',
     }),
+    new webpack.optimize.OccurrenceOrderPlugin,
+    // new webpack.optimize.UglifyJsPlugin({
+    //   mangle: true,
+    //   minimize: true,
+    //   sourceMap: true,
+    //   compress: {
+    //     warnings: false,
+    //     screw_ie8: true,
+    //     conditionals: true,
+    //     unused: true,
+    //     comparisons: true,
+    //     sequences: true,
+    //     dead_code: true,
+    //     evaluate: true,
+    //     if_return: true,
+    //     join_vars: true,
+    //     global_defs: {
+    //       DEBUG: false,
+    //     }
+    //   },
+    //   output: {
+    //     comments: false,
+    //   },
+    // }),
   ],
 
   module: {
