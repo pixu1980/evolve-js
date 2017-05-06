@@ -60,7 +60,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _createEs6Js = __webpack_require__(1);
+	var _createEs6Js = __webpack_require__(2);
 	
 	var _createEs6Js2 = _interopRequireDefault(_createEs6Js);
 	
@@ -104,7 +104,665 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(createjs) {(function webpackUniversalModuleDefinition(root, factory) {
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _createEs6Js = __webpack_require__(2);
+	
+	var _ElementHelpers = __webpack_require__(3);
+	
+	var _ElementHelpers2 = _interopRequireDefault(_ElementHelpers);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	/**
+	 * constructs an Element instance
+	 * @class Element
+	 * @classdesc Element Class
+	 //* @extends Container
+	 * @param {Object} options the options object to be merged with defaults
+	 * @type {Element}
+	 * @public
+	 */
+	var Element = function (_Easel$Container) {
+	  _inherits(Element, _Easel$Container);
+	
+	  function Element() {
+	    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	
+	    _classCallCheck(this, Element);
+	
+	    var _this = _possibleConstructorReturn(this, (Element.__proto__ || Object.getPrototypeOf(Element)).call(this));
+	
+	    _this.initDefaults();
+	    _this.initSettings(options);
+	
+	    _this.initData();
+	
+	    _this.drawElement();
+	
+	    _this.bindEvents();
+	
+	    _this.init();
+	    return _this;
+	  }
+	
+	  /**
+	   * initializes default settings for Element instance
+	   * @memberOf Element
+	   * @method initDefaults
+	   * @instance
+	   * @param {Object} defaults the defaults object for Element instance
+	   */
+	
+	
+	  _createClass(Element, [{
+	    key: 'initDefaults',
+	    value: function initDefaults(defaults) {
+	      this.inherit({
+	        debug: {
+	          fill: 'rgba(0,0,0,0.4)',
+	          stroke: {
+	            size: 1,
+	            color: '#f00'
+	          },
+	          regPoint: {
+	            radius: 3,
+	            fill: '#f00'
+	          }
+	        },
+	        defaults: {
+	          debug: false,
+	          parent: null,
+	          position: {
+	            x: 0,
+	            y: 0
+	          },
+	          scale: {
+	            x: 1,
+	            y: 1
+	          },
+	          size: {
+	            width: 0,
+	            height: 0
+	          },
+	          cache: false,
+	          mask: false,
+	          fill: 'rgba(255,255,255,0.001)',
+	          stroke: {
+	            size: 0,
+	            radius: 0,
+	            color: 'rgba(0,0,0,0.001)'
+	          },
+	          shadow: false,
+	          align: null,
+	          regPoint: false,
+	          events: {}
+	        }.inherit(defaults)
+	      });
+	    }
+	
+	    /**
+	     * initializes settings object for the Element instance
+	     * @memberOf Element
+	     * @method initSettings
+	     * @instance
+	     * @param {Object} options the options object to be merged with defaults
+	     */
+	
+	  }, {
+	    key: 'initSettings',
+	    value: function initSettings(options) {
+	      this.inherit({
+	        settings: this.defaults.inherit(true, options)
+	      });
+	
+	      !!this.settings.debug && this.settings.inherit(this.debug);
+	    }
+	
+	    /**
+	     * initializes data object for the Element instance
+	     * @memberOf Element
+	     * @method initData
+	     * @instance
+	     */
+	
+	  }, {
+	    key: 'initData',
+	    value: function initData() {
+	      this.data = {};
+	    }
+	  }, {
+	    key: 'preDrawElements',
+	    value: function preDrawElements() {
+	      this.setScale(this.settings.scale);
+	
+	      if (this.settings.parent) {
+	        this.settings.parent.addChild(this);
+	      }
+	
+	      this.setComputedBounds(this.settings.size);
+	      this.setReg();
+	    }
+	  }, {
+	    key: 'drawBackgroundElements',
+	    value: function drawBackgroundElements() {
+	      this.background = _ElementHelpers2.default.createRect.apply(_ElementHelpers2.default, [this.settings.pick(['fill', 'stroke'])].concat(_toConsumableArray(this.bounds)));
+	      this.addChild(this.background);
+	    }
+	  }, {
+	    key: 'drawElements',
+	    value: function drawElements() {
+	      //TODO:
+	    }
+	  }, {
+	    key: 'drawBehaviorElements',
+	    value: function drawBehaviorElements() {
+	      this.setMask(this.settings.mask);
+	      this.setShadow(this.settings.shadow);
+	      this.setCache(this.settings.cache);
+	    }
+	  }, {
+	    key: 'drawOverlayElements',
+	    value: function drawOverlayElements() {
+	      if (!!this.settings.regPoint) {
+	        this.regPoint = _ElementHelpers2.default.createCircle.apply(_ElementHelpers2.default, [this.settings.regPoint].concat(_toConsumableArray(this.bounds)));
+	        this.addChild(this.regPoint);
+	
+	        _ElementHelpers2.default.align(this.regPoint, null, 'center middle', false);
+	      }
+	    }
+	  }, {
+	    key: 'postDrawElements',
+	    value: function postDrawElements() {
+	      if (!!this.settings.align) {
+	        this.align(null, this.settings.align);
+	      } else {
+	        this.setPosition(this.settings.position);
+	      }
+	    }
+	
+	    /**
+	     * draws all graphic elements of the Element instance
+	     * @memberOf Element
+	     * @method draw
+	     * @instance
+	     */
+	
+	  }, {
+	    key: 'drawElement',
+	    value: function drawElement() {
+	      this.preDrawElements();
+	
+	      this.drawBackgroundElements();
+	      this.drawElements();
+	      this.drawBehaviorElements();
+	      this.drawOverlayElements();
+	
+	      this.postDrawElements();
+	    }
+	
+	    /**
+	     * sets to center/middle the regPoint of the Element instance
+	     * @memberOf Element
+	     * @method setReg
+	     * @instance
+	     */
+	
+	  }, {
+	    key: 'setReg',
+	    value: function setReg() {
+	      this.inherit({
+	        regX: this.settings.size.width * 0.5 * this.settings.scale.x,
+	        regY: this.settings.size.height * 0.5 * this.settings.scale.y
+	      });
+	
+	      return this;
+	    }
+	
+	    /**
+	     * sets or updates the position of the Element instance
+	     * @memberOf Element
+	     * @method setPosition
+	     * @instance
+	     * @param {Object} [positionOptions=null] can contain x and y or only one or them
+	     * @param {Number} [positionOptions.x=0] the x position
+	     * @param {Number} [positionOptions.y=0] the y position
+	     * @param {Boolean} [override=false] specify to override actual Element position
+	     * @param {Boolean} [force=true] ...
+	     * @return {Element} to make chainable the method
+	     */
+	
+	  }, {
+	    key: 'setPosition',
+	    value: function setPosition() {
+	      var positionOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+	      var override = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+	      var force = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+	
+	      if (!!positionOptions) {
+	        if (force) {
+	          this.settings.position = positionOptions;
+	        } else {
+	          this.settings.position.inherit(positionOptions);
+	        }
+	      }
+	
+	      if (!!this.settings.position) {
+	        if (!!this.settings.position.x) {
+	          if (!!override) {
+	            this.x = this.settings.position.x;
+	          } else {
+	            this.x += this.settings.position.x;
+	          }
+	        }
+	
+	        if (!!this.settings.position.y) {
+	          if (!!override) {
+	            this.y = this.settings.position.y;
+	          } else {
+	            this.y += this.settings.position.y;
+	          }
+	        }
+	      }
+	
+	      return this;
+	    }
+	
+	    /**
+	     * sets or updates the scaling of the Element instance
+	     * @memberOf Element
+	     * @method setScale
+	     * @instance
+	     * @param {Object|Number} scaleOptions can be an object with x and y couple or only a number to be used for both
+	     * @return {Element} to make chainable the method
+	     */
+	
+	  }, {
+	    key: 'setScale',
+	    value: function setScale() {
+	      var scaleOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+	      var force = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+	
+	      if (!!scaleOptions) {
+	        if (force) {
+	          this.settings.scale = scaleOptions;
+	        } else {
+	          this.settings.scale.inherit(scaleOptions);
+	        }
+	      }
+	
+	      if (!!this.settings.scale) {
+	        var scale = {
+	          scaleX: 1,
+	          scaleY: 1
+	        };
+	
+	        if (Number.isNumber(this.settings.scale)) {
+	          scale.inherit({
+	            scaleX: this.settings.scale,
+	            scaleY: this.settings.scale
+	          });
+	        } else if (Object.isObject(this.settings.scale)) {
+	          scale.inherit({
+	            scaleX: this.settings.scale.x,
+	            scaleY: this.settings.scale.y
+	          });
+	        }
+	
+	        this.inherit(scale);
+	      }
+	
+	      return this;
+	    }
+	
+	    /**
+	     * sets or updates the bounds of the Element instance
+	     * @memberOf Element
+	     * @method setComputedBounds
+	     * @instance
+	     * @param {Object|Number} boundsOptions ...
+	     * @return {Element} to make chainable the method
+	     */
+	
+	  }, {
+	    key: 'setComputedBounds',
+	    value: function setComputedBounds() {
+	      var boundsOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+	      var force = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+	
+	      if (!!boundsOptions) {
+	        if (force) {
+	          this.settings.size = boundsOptions;
+	        } else {
+	          this.settings.size.inherit(boundsOptions);
+	        }
+	      }
+	
+	      if (!this.bounds && !!this.settings.size) {
+	        if (String.isPercentage(this.settings.size) || Number.isNumber(this.settings.size)) {
+	          this.settings.size = {
+	            width: this.settings.size,
+	            height: this.settings.size
+	          };
+	        }
+	
+	        if (String.isPercentage(this.settings.size.width) && !!this.parent) {
+	          this.settings.size.width = this.parent.getComputedBounds().width * this.settings.size.width.parsePercentage();
+	        }
+	
+	        if (String.isPercentage(this.settings.size.height) && !!this.parent) {
+	          this.settings.size.height = this.parent.getComputedBounds().height * this.settings.size.height.parsePercentage();
+	        }
+	
+	        this.bounds = [0, 0, this.settings.size.width * this.settings.scale.x, this.settings.size.height * this.settings.scale.y];
+	        this.setBounds.apply(this, _toConsumableArray(this.bounds));
+	      }
+	
+	      return this;
+	    }
+	
+	    /**
+	     * sets or updates the Mask of the Element instance
+	     * @memberOf Element
+	     * @method setMask
+	     * @instance
+	     * @param {Object|Shadow} maskOptions can be an object with {color, x, y, blur}<br>or directly an instance of Shadow (EaselJS)
+	     * @param {Boolean} force ....
+	     * @return {Element} to make chainable the method
+	     */
+	
+	  }, {
+	    key: 'setMask',
+	    value: function setMask() {
+	      var maskOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+	      var force = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+	
+	      if (!!maskOptions) {
+	        if (force) {
+	          this.settings.mask = maskOptions;
+	        } else {
+	          this.settings.mask.inherit(maskOptions);
+	        }
+	      }
+	
+	      if (!!this.settings.mask) {
+	        this.maskShape = this.settings.mask;
+	
+	        if (!(this.settings.mask instanceof _createEs6Js.Easel.Shape) && !(this.settings.mask instanceof _createEs6Js.Easel.DisplayObject)) {
+	          this.maskBounds = [0, 0, this.settings.size.width * this.settings.scale.x, this.settings.size.height * this.settings.scale.y];
+	
+	          if (Object.isObject(this.settings.mask)) {
+	            this.maskBounds = [0, 0, this.settings.size.width * this.settings.scale.x * this.settings.mask.scale, this.settings.size.height * this.settings.scale.y * this.settings.mask.scale];
+	            this.maskShape = _ElementHelpers2.default.createRect.apply(_ElementHelpers2.default, [this.settings.mask.pick(['fill', 'stroke'])].concat(_toConsumableArray(this.maskBounds)));
+	          } else if (Number.isNumber(this.settings.mask)) {
+	            this.maskBounds = [0, 0, this.settings.size.width * this.settings.scale.x * this.settings.mask, this.settings.size.height * this.settings.scale.y * this.settings.mask];
+	            this.maskShape = _ElementHelpers2.default.createRect.apply(_ElementHelpers2.default, [this.settings.pick(['fill', 'stroke'])].concat(_toConsumableArray(this.maskBounds)));
+	          }
+	
+	          this.maskShape.inherit({
+	            x: this.bounds[2] * 0.5 - this.maskBounds[2] * 0.5,
+	            y: this.bounds[3] * 0.5 - this.maskBounds[3] * 0.5
+	          });
+	        }
+	
+	        if (!!this.settings.debug) {
+	          this.addChild(this.maskShape);
+	        }
+	
+	        this.mask = this.maskShape;
+	      }
+	
+	      return this;
+	    }
+	
+	    /**
+	     * sets or updates the Shadow of the Element instance
+	     * @memberOf Element
+	     * @method setShadow
+	     * @instance
+	     * @param {Object|Shadow} shadowOptions can be an object with {color, x, y, blur}<br>or directly an instance of Shadow (EaselJS)
+	     * @param {Boolean} force ....
+	     * @return {Element} to make chainable the method
+	     */
+	
+	  }, {
+	    key: 'setShadow',
+	    value: function setShadow() {
+	      var shadowOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+	      var force = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+	
+	      if (!!shadowOptions) {
+	        if (force) {
+	          this.settings.shadow = shadowOptions;
+	        } else {
+	          this.settings.shadow.inherit(shadowOptions);
+	        }
+	
+	        if (!!this.settings.shadow) {
+	          var shadow = null;
+	
+	          if (Object.isObject(this.settings.shadow)) {
+	            var shadowSettings = [this.settings.shadow.color, this.settings.shadow.x, this.settings.shadow.y, this.settings.shadow.blur];
+	
+	            shadow = new (Function.prototype.bind.apply(_createEs6Js.Easel.Shadow, [null].concat(shadowSettings)))();
+	          } else if (this.settings.shadow instanceof _createEs6Js.Easel.Shadow) {
+	            shadow = this.settings.shadow;
+	          }
+	
+	          this.inherit({
+	            shadow: shadow
+	          });
+	        }
+	      } else {
+	        this.settings.shadow = null;
+	
+	        this.inherit({
+	          shadow: null
+	        });
+	      }
+	
+	      return this;
+	    }
+	
+	    /**
+	     * sets or updates the Cache of the Element instance
+	     * @memberOf Element
+	     * @method setCache
+	     * @instance
+	     * @param {Object|Shadow} cacheOptions ..
+	     * @param {Boolean} force ....
+	     * @return {Element} to make chainable the method
+	     */
+	
+	  }, {
+	    key: 'setCache',
+	    value: function setCache() {
+	      var cacheOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+	      var force = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+	
+	      if (!!cacheOptions) {
+	        if (force) {
+	          this.settings.cache = cacheOptions;
+	        } else {
+	          this.settings.cache.inherit(cacheOptions);
+	        }
+	
+	        if (!!this.settings.cache) {
+	          this.cache.apply(this, [this.bounds.x - 5, this.bounds.y - 5, this.getComputedBounds().width, this.getComputedBounds().height]);
+	        }
+	      }
+	
+	      return this;
+	    }
+	
+	    /**
+	     * Aligns the Element instance, based on it's parent bounds or specified parentElement bounds and mode parameter
+	     * @memberOf Element
+	     * @method align
+	     * @instance
+	     * @param {Object|null} parentElement if null, it considers the actual Element instance parent, otherwise it aligns in base of the specified parentElement
+	     * @param {String} mode can be a set of one or two strings (blank separated) in any order, for horizontalModes (left, center, right), for verticalModes (top, middle, bottom)
+	     * @return {Element} to make chainable the method
+	     */
+	
+	  }, {
+	    key: 'align',
+	    value: function align() {
+	      var parentElement = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+	      var mode = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'left top';
+	
+	      if (!parentElement) {
+	        parentElement = this.parent;
+	      }
+	
+	      var parentBounds = parentElement.getBounds();
+	      var bounds = this.getBounds();
+	      var modes = mode.toArray(' ');
+	      var horizontalModes = ['left', 'center', 'right'];
+	      var verticalModes = ['top', 'middle', 'bottom'];
+	
+	      var position = {
+	        x: 0,
+	        y: 0
+	      };
+	
+	      if (horizontalModes.contains(modes)) {
+	        if (modes.contains('left')) {
+	          position.inherit({
+	            x: bounds.width * 0.5
+	          });
+	        } else if (modes.contains('center')) {
+	          position.inherit({
+	            x: parentBounds.width * 0.5
+	          });
+	        } else if (modes.contains('right')) {
+	          position.inherit({
+	            x: parentBounds.width - bounds.width * 0.5
+	          });
+	        }
+	      }
+	
+	      if (verticalModes.contains(modes)) {
+	        if (modes.contains('top')) {
+	          position.inherit({
+	            y: bounds.height * 0.5
+	          });
+	        } else if (modes.contains('middle')) {
+	          position.inherit({
+	            y: parentBounds.height * 0.5
+	          });
+	        } else if (modes.contains('bottom')) {
+	          position.inherit({
+	            y: parentBounds.height - bounds.height * 0.5
+	          });
+	        }
+	      }
+	
+	      this.settings.inherit({
+	        position: position
+	      });
+	
+	      this.setPosition(null, true);
+	
+	      return this;
+	    }
+	
+	    /**
+	     * returns the actual computed bounds of the Element instance, including scale factor and top, right, bottom, left coordinates
+	     * @memberOf Element
+	     * @method getComputedBounds
+	     * @instance
+	     * @return {Object} the actual Element instance computed bounds object<br>
+	     * <pre>
+	     *   {
+	     *     {
+	     *       top: number,
+	     *       right: number,
+	     *       bottom: number,
+	     *       left: number,
+	     *       x: number,
+	     *       y: number,
+	     *       width: number,
+	     *       height: number
+	     *     }
+	     *   }
+	     * </pre>
+	     */
+	
+	  }, {
+	    key: 'getComputedBounds',
+	    value: function getComputedBounds() {
+	      var bounds = this.getBounds();
+	
+	      return {
+	        top: this.y - bounds.height * 0.5 * this.settings.scale.y,
+	        right: this.x + bounds.width * 0.5 * this.settings.scale.x,
+	        bottom: this.y + bounds.height * 0.5 * this.settings.scale.y,
+	        left: this.x - bounds.width * 0.5 * this.settings.scale.x,
+	        x: this.x,
+	        y: this.y,
+	        width: bounds.width * this.settings.scale.x,
+	        height: bounds.height * this.settings.scale.y
+	      };
+	    }
+	
+	    /**
+	     * binds all events specified in the settings object for the Element instance, it supports all EaselJS classes events (eg. click, mouseover, etc...)
+	     * @memberOf Element
+	     * @method bindEvents
+	     * @instance
+	     */
+	
+	  }, {
+	    key: 'bindEvents',
+	    value: function bindEvents() {
+	      var _this2 = this;
+	
+	      if (!!this.settings.events) {
+	        this.settings.events.each(function (value, key) {
+	          if (Function.isFunction(value)) {
+	            _this2.on(key, value);
+	          }
+	        });
+	      }
+	    }
+	
+	    /**
+	     * empty init method, to be overriden in classes that extends Element, to use for all those initializations you might need after having rendered the Element
+	     * @memberOf Element
+	     * @method init
+	     * @instance
+	     */
+	
+	  }, {
+	    key: 'init',
+	    value: function init() {}
+	  }]);
+	
+	  return Element;
+	}(_createEs6Js.Easel.Container);
+	
+	exports.default = Element;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	(function webpackUniversalModuleDefinition(root, factory) {
 		if(true)
 			module.exports = factory();
 		else if(typeof define === 'function' && define.amd)
@@ -228,7 +886,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* 1 */
 	/***/ (function(module, exports, __webpack_require__) {
 	
-		var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/*!
+		var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(createjs, module, global) {/*!
 		* CreateJS
 		* Visit http://createjs.com/ for documentation, updates and examples.
 		*
@@ -27238,7 +27896,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		
 		module.exports = scope.createjs;
 		
-		/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module), (function() { return this; }())))
+		/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(2)(module), (function() { return this; }())))
 	
 	/***/ }),
 	/* 2 */
@@ -27263,7 +27921,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		/* WEBPACK VAR INJECTION */(function(module) {'use strict';
 		
 		module.export = {
-		  version: '0.0.8',
+		  version: '0.0.9',
 		  build: new Date()
 		};
 		/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
@@ -27478,665 +28136,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	;
 	//# sourceMappingURL=create-es6.js.map
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _createEs6Js = __webpack_require__(1);
-	
-	var _ElementHelpers = __webpack_require__(3);
-	
-	var _ElementHelpers2 = _interopRequireDefault(_ElementHelpers);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	/**
-	 * constructs an Element instance
-	 * @class Element
-	 * @classdesc Element Class
-	 //* @extends Container
-	 * @param {Object} options the options object to be merged with defaults
-	 * @type {Element}
-	 * @public
-	 */
-	var Element = function (_Easel$Container) {
-	  _inherits(Element, _Easel$Container);
-	
-	  function Element() {
-	    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-	
-	    _classCallCheck(this, Element);
-	
-	    var _this = _possibleConstructorReturn(this, (Element.__proto__ || Object.getPrototypeOf(Element)).call(this));
-	
-	    _this.initDefaults();
-	    _this.initSettings(options);
-	
-	    _this.initData();
-	
-	    _this.drawElement();
-	
-	    _this.bindEvents();
-	
-	    _this.init();
-	    return _this;
-	  }
-	
-	  /**
-	   * initializes default settings for Element instance
-	   * @memberOf Element
-	   * @method initDefaults
-	   * @instance
-	   * @param {Object} defaults the defaults object for Element instance
-	   */
-	
-	
-	  _createClass(Element, [{
-	    key: 'initDefaults',
-	    value: function initDefaults(defaults) {
-	      this.inherit({
-	        debug: {
-	          fill: 'rgba(0,0,0,0.4)',
-	          stroke: {
-	            size: 1,
-	            color: '#f00'
-	          },
-	          regPoint: {
-	            radius: 3,
-	            fill: '#f00'
-	          }
-	        },
-	        defaults: {
-	          debug: false,
-	          parent: null,
-	          position: {
-	            x: 0,
-	            y: 0
-	          },
-	          scale: {
-	            x: 1,
-	            y: 1
-	          },
-	          size: {
-	            width: 0,
-	            height: 0
-	          },
-	          cache: false,
-	          mask: false,
-	          fill: 'rgba(255,255,255,0.001)',
-	          stroke: {
-	            size: 0,
-	            radius: 0,
-	            color: 'rgba(0,0,0,0.001)'
-	          },
-	          shadow: false,
-	          align: null,
-	          regPoint: false,
-	          events: {}
-	        }.inherit(defaults)
-	      });
-	    }
-	
-	    /**
-	     * initializes settings object for the Element instance
-	     * @memberOf Element
-	     * @method initSettings
-	     * @instance
-	     * @param {Object} options the options object to be merged with defaults
-	     */
-	
-	  }, {
-	    key: 'initSettings',
-	    value: function initSettings(options) {
-	      this.inherit({
-	        settings: this.defaults.inherit(true, options)
-	      });
-	
-	      !!this.settings.debug && this.settings.inherit(this.debug);
-	    }
-	
-	    /**
-	     * initializes data object for the Element instance
-	     * @memberOf Element
-	     * @method initData
-	     * @instance
-	     */
-	
-	  }, {
-	    key: 'initData',
-	    value: function initData() {
-	      this.data = {};
-	    }
-	  }, {
-	    key: 'preDrawElements',
-	    value: function preDrawElements() {
-	      this.setScale(this.settings.scale);
-	
-	      if (this.settings.parent) {
-	        this.settings.parent.addChild(this);
-	      }
-	
-	      this.setComputedBounds(this.settings.size);
-	      this.setReg();
-	    }
-	  }, {
-	    key: 'drawBackgroundElements',
-	    value: function drawBackgroundElements() {
-	      this.background = _ElementHelpers2.default.createRect.apply(_ElementHelpers2.default, [this.settings.pick(['fill', 'stroke'])].concat(_toConsumableArray(this.bounds)));
-	      this.addChild(this.background);
-	    }
-	  }, {
-	    key: 'drawElements',
-	    value: function drawElements() {
-	      //TODO:
-	    }
-	  }, {
-	    key: 'drawBehaviorElements',
-	    value: function drawBehaviorElements() {
-	      this.setMask(this.settings.mask);
-	      this.setShadow(this.settings.shadow);
-	      this.setCache(this.settings.cache);
-	    }
-	  }, {
-	    key: 'drawOverlayElements',
-	    value: function drawOverlayElements() {
-	      if (!!this.settings.regPoint) {
-	        this.regPoint = _ElementHelpers2.default.createCircle.apply(_ElementHelpers2.default, [this.settings.regPoint].concat(_toConsumableArray(this.bounds)));
-	        this.addChild(this.regPoint);
-	
-	        _ElementHelpers2.default.align(this.regPoint, null, 'center middle', false);
-	      }
-	    }
-	  }, {
-	    key: 'postDrawElements',
-	    value: function postDrawElements() {
-	      if (!!this.settings.align) {
-	        this.align(null, this.settings.align);
-	      } else {
-	        this.setPosition(this.settings.position);
-	      }
-	    }
-	
-	    /**
-	     * draws all graphic elements of the Element instance
-	     * @memberOf Element
-	     * @method draw
-	     * @instance
-	     */
-	
-	  }, {
-	    key: 'drawElement',
-	    value: function drawElement() {
-	      this.preDrawElements();
-	
-	      this.drawBackgroundElements();
-	      this.drawElements();
-	      this.drawBehaviorElements();
-	      this.drawOverlayElements();
-	
-	      this.postDrawElements();
-	    }
-	
-	    /**
-	     * sets to center/middle the regPoint of the Element instance
-	     * @memberOf Element
-	     * @method setReg
-	     * @instance
-	     */
-	
-	  }, {
-	    key: 'setReg',
-	    value: function setReg() {
-	      this.inherit({
-	        regX: this.settings.size.width * 0.5 * this.settings.scale.x,
-	        regY: this.settings.size.height * 0.5 * this.settings.scale.y
-	      });
-	
-	      return this;
-	    }
-	
-	    /**
-	     * sets or updates the position of the Element instance
-	     * @memberOf Element
-	     * @method setPosition
-	     * @instance
-	     * @param {Object} [positionOptions=null] can contain x and y or only one or them
-	     * @param {Number} [positionOptions.x=0] the x position
-	     * @param {Number} [positionOptions.y=0] the y position
-	     * @param {Boolean} [override=false] specify to override actual Element position
-	     * @param {Boolean} [force=true] ...
-	     * @return {Element} to make chainable the method
-	     */
-	
-	  }, {
-	    key: 'setPosition',
-	    value: function setPosition() {
-	      var positionOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-	      var override = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-	      var force = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-	
-	      if (!!positionOptions) {
-	        if (force) {
-	          this.settings.position = positionOptions;
-	        } else {
-	          this.settings.position.inherit(positionOptions);
-	        }
-	      }
-	
-	      if (!!this.settings.position) {
-	        if (!!this.settings.position.x) {
-	          if (!!override) {
-	            this.x = this.settings.position.x;
-	          } else {
-	            this.x += this.settings.position.x;
-	          }
-	        }
-	
-	        if (!!this.settings.position.y) {
-	          if (!!override) {
-	            this.y = this.settings.position.y;
-	          } else {
-	            this.y += this.settings.position.y;
-	          }
-	        }
-	      }
-	
-	      return this;
-	    }
-	
-	    /**
-	     * sets or updates the scaling of the Element instance
-	     * @memberOf Element
-	     * @method setScale
-	     * @instance
-	     * @param {Object|Number} scaleOptions can be an object with x and y couple or only a number to be used for both
-	     * @return {Element} to make chainable the method
-	     */
-	
-	  }, {
-	    key: 'setScale',
-	    value: function setScale() {
-	      var scaleOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-	      var force = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-	
-	      if (!!scaleOptions) {
-	        if (force) {
-	          this.settings.scale = scaleOptions;
-	        } else {
-	          this.settings.scale.inherit(scaleOptions);
-	        }
-	      }
-	
-	      if (!!this.settings.scale) {
-	        var scale = {
-	          scaleX: 1,
-	          scaleY: 1
-	        };
-	
-	        if (Number.isNumber(this.settings.scale)) {
-	          scale.inherit({
-	            scaleX: this.settings.scale,
-	            scaleY: this.settings.scale
-	          });
-	        } else if (Object.isObject(this.settings.scale)) {
-	          scale.inherit({
-	            scaleX: this.settings.scale.x,
-	            scaleY: this.settings.scale.y
-	          });
-	        }
-	
-	        this.inherit(scale);
-	      }
-	
-	      return this;
-	    }
-	
-	    /**
-	     * sets or updates the bounds of the Element instance
-	     * @memberOf Element
-	     * @method setComputedBounds
-	     * @instance
-	     * @param {Object|Number} boundsOptions ...
-	     * @return {Element} to make chainable the method
-	     */
-	
-	  }, {
-	    key: 'setComputedBounds',
-	    value: function setComputedBounds() {
-	      var boundsOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-	      var force = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-	
-	      if (!!boundsOptions) {
-	        if (force) {
-	          this.settings.size = boundsOptions;
-	        } else {
-	          this.settings.size.inherit(boundsOptions);
-	        }
-	      }
-	
-	      if (!this.bounds && !!this.settings.size) {
-	        if (String.isPercentage(this.settings.size) || Number.isNumber(this.settings.size)) {
-	          this.settings.size = {
-	            width: this.settings.size,
-	            height: this.settings.size
-	          };
-	        }
-	
-	        if (String.isPercentage(this.settings.size.width) && !!this.parent) {
-	          this.settings.size.width = this.parent.getComputedBounds().width * this.settings.size.width.parsePercentage();
-	        }
-	
-	        if (String.isPercentage(this.settings.size.height) && !!this.parent) {
-	          this.settings.size.height = this.parent.getComputedBounds().height * this.settings.size.height.parsePercentage();
-	        }
-	
-	        this.bounds = [0, 0, this.settings.size.width * this.settings.scale.x, this.settings.size.height * this.settings.scale.y];
-	        this.setBounds.apply(this, _toConsumableArray(this.bounds));
-	      }
-	
-	      return this;
-	    }
-	
-	    /**
-	     * sets or updates the Mask of the Element instance
-	     * @memberOf Element
-	     * @method setMask
-	     * @instance
-	     * @param {Object|Shadow} maskOptions can be an object with {color, x, y, blur}<br>or directly an instance of Shadow (EaselJS)
-	     * @param {Boolean} force ....
-	     * @return {Element} to make chainable the method
-	     */
-	
-	  }, {
-	    key: 'setMask',
-	    value: function setMask() {
-	      var maskOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-	      var force = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-	
-	      if (!!maskOptions) {
-	        if (force) {
-	          this.settings.mask = maskOptions;
-	        } else {
-	          this.settings.mask.inherit(maskOptions);
-	        }
-	      }
-	
-	      if (!!this.settings.mask) {
-	        this.maskShape = this.settings.mask;
-	
-	        if (!(this.settings.mask instanceof _createEs6Js.Easel.Shape) && !(this.settings.mask instanceof _createEs6Js.Easel.DisplayObject)) {
-	          this.maskBounds = [0, 0, this.settings.size.width * this.settings.scale.x, this.settings.size.height * this.settings.scale.y];
-	
-	          if (Object.isObject(this.settings.mask)) {
-	            this.maskBounds = [0, 0, this.settings.size.width * this.settings.scale.x * this.settings.mask.scale, this.settings.size.height * this.settings.scale.y * this.settings.mask.scale];
-	            this.maskShape = _ElementHelpers2.default.createRect.apply(_ElementHelpers2.default, [this.settings.mask.pick(['fill', 'stroke'])].concat(_toConsumableArray(this.maskBounds)));
-	          } else if (Number.isNumber(this.settings.mask)) {
-	            this.maskBounds = [0, 0, this.settings.size.width * this.settings.scale.x * this.settings.mask, this.settings.size.height * this.settings.scale.y * this.settings.mask];
-	            this.maskShape = _ElementHelpers2.default.createRect.apply(_ElementHelpers2.default, [this.settings.pick(['fill', 'stroke'])].concat(_toConsumableArray(this.maskBounds)));
-	          }
-	
-	          this.maskShape.inherit({
-	            x: this.bounds[2] * 0.5 - this.maskBounds[2] * 0.5,
-	            y: this.bounds[3] * 0.5 - this.maskBounds[3] * 0.5
-	          });
-	        }
-	
-	        if (!!this.settings.debug) {
-	          this.addChild(this.maskShape);
-	        }
-	
-	        this.mask = this.maskShape;
-	      }
-	
-	      return this;
-	    }
-	
-	    /**
-	     * sets or updates the Shadow of the Element instance
-	     * @memberOf Element
-	     * @method setShadow
-	     * @instance
-	     * @param {Object|Shadow} shadowOptions can be an object with {color, x, y, blur}<br>or directly an instance of Shadow (EaselJS)
-	     * @param {Boolean} force ....
-	     * @return {Element} to make chainable the method
-	     */
-	
-	  }, {
-	    key: 'setShadow',
-	    value: function setShadow() {
-	      var shadowOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-	      var force = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-	
-	      if (!!shadowOptions) {
-	        if (force) {
-	          this.settings.shadow = shadowOptions;
-	        } else {
-	          this.settings.shadow.inherit(shadowOptions);
-	        }
-	
-	        if (!!this.settings.shadow) {
-	          var shadow = null;
-	
-	          if (Object.isObject(this.settings.shadow)) {
-	            var shadowSettings = [this.settings.shadow.color, this.settings.shadow.x, this.settings.shadow.y, this.settings.shadow.blur];
-	
-	            shadow = new (Function.prototype.bind.apply(_createEs6Js.Easel.Shadow, [null].concat(shadowSettings)))();
-	          } else if (this.settings.shadow instanceof _createEs6Js.Easel.Shadow) {
-	            shadow = this.settings.shadow;
-	          }
-	
-	          this.inherit({
-	            shadow: shadow
-	          });
-	        }
-	      } else {
-	        this.settings.shadow = null;
-	
-	        this.inherit({
-	          shadow: null
-	        });
-	      }
-	
-	      return this;
-	    }
-	
-	    /**
-	     * sets or updates the Cache of the Element instance
-	     * @memberOf Element
-	     * @method setCache
-	     * @instance
-	     * @param {Object|Shadow} cacheOptions ..
-	     * @param {Boolean} force ....
-	     * @return {Element} to make chainable the method
-	     */
-	
-	  }, {
-	    key: 'setCache',
-	    value: function setCache() {
-	      var cacheOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-	      var force = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-	
-	      if (!!cacheOptions) {
-	        if (force) {
-	          this.settings.cache = cacheOptions;
-	        } else {
-	          this.settings.cache.inherit(cacheOptions);
-	        }
-	
-	        if (!!this.settings.cache) {
-	          this.cache.apply(this, [this.bounds.x - 5, this.bounds.y - 5, this.getComputedBounds().width, this.getComputedBounds().height]);
-	        }
-	      }
-	
-	      return this;
-	    }
-	
-	    /**
-	     * Aligns the Element instance, based on it's parent bounds or specified parentElement bounds and mode parameter
-	     * @memberOf Element
-	     * @method align
-	     * @instance
-	     * @param {Object|null} parentElement if null, it considers the actual Element instance parent, otherwise it aligns in base of the specified parentElement
-	     * @param {String} mode can be a set of one or two strings (blank separated) in any order, for horizontalModes (left, center, right), for verticalModes (top, middle, bottom)
-	     * @return {Element} to make chainable the method
-	     */
-	
-	  }, {
-	    key: 'align',
-	    value: function align() {
-	      var parentElement = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-	      var mode = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'left top';
-	
-	      if (!parentElement) {
-	        parentElement = this.parent;
-	      }
-	
-	      var parentBounds = parentElement.getBounds();
-	      var bounds = this.getBounds();
-	      var modes = mode.toArray(' ');
-	      var horizontalModes = ['left', 'center', 'right'];
-	      var verticalModes = ['top', 'middle', 'bottom'];
-	
-	      var position = {
-	        x: 0,
-	        y: 0
-	      };
-	
-	      if (horizontalModes.contains(modes)) {
-	        if (modes.contains('left')) {
-	          position.inherit({
-	            x: bounds.width * 0.5
-	          });
-	        } else if (modes.contains('center')) {
-	          position.inherit({
-	            x: parentBounds.width * 0.5
-	          });
-	        } else if (modes.contains('right')) {
-	          position.inherit({
-	            x: parentBounds.width - bounds.width * 0.5
-	          });
-	        }
-	      }
-	
-	      if (verticalModes.contains(modes)) {
-	        if (modes.contains('top')) {
-	          position.inherit({
-	            y: bounds.height * 0.5
-	          });
-	        } else if (modes.contains('middle')) {
-	          position.inherit({
-	            y: parentBounds.height * 0.5
-	          });
-	        } else if (modes.contains('bottom')) {
-	          position.inherit({
-	            y: parentBounds.height - bounds.height * 0.5
-	          });
-	        }
-	      }
-	
-	      this.settings.inherit({
-	        position: position
-	      });
-	
-	      this.setPosition(null, true);
-	
-	      return this;
-	    }
-	
-	    /**
-	     * returns the actual computed bounds of the Element instance, including scale factor and top, right, bottom, left coordinates
-	     * @memberOf Element
-	     * @method getComputedBounds
-	     * @instance
-	     * @return {Object} the actual Element instance computed bounds object<br>
-	     * <pre>
-	     *   {
-	     *     {
-	     *       top: number,
-	     *       right: number,
-	     *       bottom: number,
-	     *       left: number,
-	     *       x: number,
-	     *       y: number,
-	     *       width: number,
-	     *       height: number
-	     *     }
-	     *   }
-	     * </pre>
-	     */
-	
-	  }, {
-	    key: 'getComputedBounds',
-	    value: function getComputedBounds() {
-	      var bounds = this.getBounds();
-	
-	      return {
-	        top: this.y - bounds.height * 0.5 * this.settings.scale.y,
-	        right: this.x + bounds.width * 0.5 * this.settings.scale.x,
-	        bottom: this.y + bounds.height * 0.5 * this.settings.scale.y,
-	        left: this.x - bounds.width * 0.5 * this.settings.scale.x,
-	        x: this.x,
-	        y: this.y,
-	        width: bounds.width * this.settings.scale.x,
-	        height: bounds.height * this.settings.scale.y
-	      };
-	    }
-	
-	    /**
-	     * binds all events specified in the settings object for the Element instance, it supports all EaselJS classes events (eg. click, mouseover, etc...)
-	     * @memberOf Element
-	     * @method bindEvents
-	     * @instance
-	     */
-	
-	  }, {
-	    key: 'bindEvents',
-	    value: function bindEvents() {
-	      var _this2 = this;
-	
-	      if (!!this.settings.events) {
-	        this.settings.events.each(function (value, key) {
-	          if (Function.isFunction(value)) {
-	            _this2.on(key, value);
-	          }
-	        });
-	      }
-	    }
-	
-	    /**
-	     * empty init method, to be overriden in classes that extends Element, to use for all those initializations you might need after having rendered the Element
-	     * @memberOf Element
-	     * @method init
-	     * @instance
-	     */
-	
-	  }, {
-	    key: 'init',
-	    value: function init() {}
-	  }]);
-	
-	  return Element;
-	}(_createEs6Js.Easel.Container);
-	
-	exports.default = Element;
 
 /***/ }),
 /* 3 */
@@ -28150,7 +28149,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _createEs6Js = __webpack_require__(1);
+	var _createEs6Js = __webpack_require__(2);
 	
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 	
@@ -28870,7 +28869,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _ElementHelpers2 = _interopRequireDefault(_ElementHelpers);
 	
-	var _Element2 = __webpack_require__(2);
+	var _Element2 = __webpack_require__(1);
 	
 	var _Element3 = _interopRequireDefault(_Element2);
 	
@@ -29108,13 +29107,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 	
-	var _createEs6Js = __webpack_require__(1);
+	var _createEs6Js = __webpack_require__(2);
 	
 	var _ElementHelpers = __webpack_require__(3);
 	
 	var _ElementHelpers2 = _interopRequireDefault(_ElementHelpers);
 	
-	var _Element2 = __webpack_require__(2);
+	var _Element2 = __webpack_require__(1);
 	
 	var _Element3 = _interopRequireDefault(_Element2);
 	
@@ -29413,7 +29412,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _createEs6Js = __webpack_require__(1);
+	var _createEs6Js = __webpack_require__(2);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -46568,7 +46567,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 	
 	module.exports = {
-	  version: '0.0.8',
+	  version: '0.0.6',
 	  build: new Date()
 	};
 
@@ -46586,7 +46585,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 	
-	var _Element2 = __webpack_require__(2);
+	var _Element2 = __webpack_require__(1);
 	
 	var _Element3 = _interopRequireDefault(_Element2);
 	
@@ -46730,7 +46729,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 	
-	var _Element2 = __webpack_require__(2);
+	var _Element2 = __webpack_require__(1);
 	
 	var _Element3 = _interopRequireDefault(_Element2);
 	
@@ -46897,7 +46896,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _ElementHelpers2 = _interopRequireDefault(_ElementHelpers);
 	
-	var _Element2 = __webpack_require__(2);
+	var _Element2 = __webpack_require__(1);
 	
 	var _Element3 = _interopRequireDefault(_Element2);
 	
@@ -47055,7 +47054,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _ElementHelpers2 = _interopRequireDefault(_ElementHelpers);
 	
-	var _Element = __webpack_require__(2);
+	var _Element = __webpack_require__(1);
 	
 	var _Element2 = _interopRequireDefault(_Element);
 	
@@ -47132,7 +47131,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _createEs6Js = __webpack_require__(1);
+	var _createEs6Js = __webpack_require__(2);
 	
 	var _SoundElement = __webpack_require__(9);
 	
