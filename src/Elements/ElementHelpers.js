@@ -1,4 +1,4 @@
-import {Easel} from 'create-es6-js';
+import Create from 'create-es6-js';
 
 /**
  * @class ElementHelpers
@@ -118,7 +118,7 @@ export default class ElementHelpers {
     if(horizontalModes.contains(modes)) {
       if(modes.contains('center')) {
         position.inherit({
-          x: parentBounds.width * 0.5 + (!!regPoint && !(element instanceof Easel.Bitmap) ? elementBounds.width * 0.5 : 0),
+          x: parentBounds.width * 0.5 + (!!regPoint && !(element instanceof Create.Easel.Bitmap) ? elementBounds.width * 0.5 : 0),
         });
       } else if(modes.contains('left')) {
         position.inherit({
@@ -134,7 +134,7 @@ export default class ElementHelpers {
     if(verticalModes.contains(modes)) {
       if(modes.contains('middle')) {
         position.inherit({
-          y: parentBounds.height * 0.5 + (!!regPoint && !(element instanceof Easel.Bitmap) ? elementBounds.width * 0.5 : 0),
+          y: parentBounds.height * 0.5 + (!!regPoint && !(element instanceof Create.Easel.Bitmap) ? elementBounds.width * 0.5 : 0),
         });
       } else if(modes.contains('top')) {
         position.inherit({
@@ -166,7 +166,7 @@ export default class ElementHelpers {
    * @return {Container}
    */
   static createContainer(...bounds) {
-    const container = (new Easel.Container()).inherit({
+    const container = (new Create.Easel.Container()).inherit({
       x: bounds[0],
       y: bounds[1],
     });
@@ -207,7 +207,7 @@ export default class ElementHelpers {
 
     const settings = defaults.inherit(true, options);
 
-    const graphics = new Easel.Graphics();
+    const graphics = new Create.Easel.Graphics();
 
     if(!!settings.fill) {
       if(Object.isObject(settings.fill)) {
@@ -279,7 +279,7 @@ export default class ElementHelpers {
     graphics.endFill();
     graphics.endStroke();
 
-    const rect = new Easel.Shape(graphics);
+    const rect = new Create.Easel.Shape(graphics);
     rect.setBounds(...bounds);
 
     return rect;
@@ -319,7 +319,7 @@ export default class ElementHelpers {
     const graphics = this.createGraphics(settings, ...bounds);
     graphics.drawCircle(0, 0, settings.radius);
 
-    const circle = new Easel.Shape(graphics);
+    const circle = new Create.Easel.Shape(graphics);
     circle.setBounds(...bounds);
 
     return circle;
@@ -336,7 +336,7 @@ export default class ElementHelpers {
    * @return {Text}
    */
   static createText(text, font, color) {
-    return new Easel.Text(text, font, color);
+    return new Create.Easel.Text(text, font, color);
   }
 
   /**
@@ -348,7 +348,7 @@ export default class ElementHelpers {
    * @return {Bitmap}
    */
   static createImage(image) {
-    return new Easel.Bitmap(image);
+    return new Create.Easel.Bitmap(image);
   }
 
   /**
@@ -360,6 +360,6 @@ export default class ElementHelpers {
    * @return {Sprite}
    */
   static createSprite(spritesheet) {
-    return new Easel.Sprite(spritesheet);
+    return new Create.Easel.Sprite(spritesheet);
   }
 }

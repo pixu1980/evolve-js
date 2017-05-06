@@ -1,4 +1,4 @@
-import {Easel} from 'create-es6-js';
+import Create from 'create-es6-js';
 import ElementHelpers from './ElementHelpers';
 import Element from './Element';
 
@@ -119,7 +119,7 @@ export default class TextElement extends Element {
         lineHeight: this.settings.lineHeight || null,
         lineWidth: this.settings.maxWidth || null,
         outline: this.settings.outline.size,
-        shadow: !!this.settings.shadow ? new Easel.Shadow(...this.settings.shadow) : null,
+        shadow: !!this.settings.shadow ? new Create.Easel.Shadow(...this.settings.shadow) : null,
       });
     }
 
@@ -128,7 +128,7 @@ export default class TextElement extends Element {
       textBaseline: 'middle',
       lineHeight: this.settings.lineHeight || null,
       lineWidth: this.settings.maxWidth || null,
-      shadow: !!this.settings.shadow ? new Easel.Shadow(...this.settings.shadow) : null,
+      shadow: !!this.settings.shadow ? new Create.Easel.Shadow(...this.settings.shadow) : null,
     });
 
     this.computeBounds();

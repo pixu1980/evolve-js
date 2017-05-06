@@ -1,10 +1,10 @@
-import {SoundJS} from 'create-es6-js';
+import Create from 'create-es6-js';
 
 export default class SoundElement {
 
   constructor(props) {
     this.defaults = {
-      interrupt: SoundJS.Sound.INTERRUPT_ANY,
+      interrupt: Create.Sound.INTERRUPT_ANY,
       loop: 0,
       delay: 0,
       offset: 0,
@@ -27,7 +27,7 @@ export default class SoundElement {
       soundProps.volume = 0;
     }
 
-    this.instance = SoundJS.Sound.play(this.props.sound, soundProps);
+    this.instance = Create.Sound.play(this.props.sound, soundProps);
 
     const eventsDefined = !!this.props.events;
 
