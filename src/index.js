@@ -1,7 +1,6 @@
 import Create from 'create-es6-js';
 
 import Elements from './Elements';
-import Translations from './Translations';
 import Sounds from './Sounds';
 
 import release from '../release';
@@ -18,7 +17,6 @@ const evolve = {
   Create,
   Elements,
   Sounds,
-  Translations,
   status,
 };
 
@@ -28,5 +26,4 @@ export {
   Create,
   Elements,
   Sounds,
-  Translations,
 };
