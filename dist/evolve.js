@@ -59,11 +59,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.Sounds = exports.Elements = exports.Create = undefined;
+	exports.Sounds = exports.Elements = exports.Preload = exports.Tween = exports.Easel = undefined;
 	
 	var _createEs6Js = __webpack_require__(2);
-	
-	var _createEs6Js2 = _interopRequireDefault(_createEs6Js);
 	
 	var _Elements = __webpack_require__(14);
 	
@@ -88,14 +86,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	console.log('EvolveJS initialized', status);
 	
 	var evolve = {
-	  Create: _createEs6Js2.default,
+	  Easel: _createEs6Js.Easel,
+	  Tween: _createEs6Js.Tween,
+	  Preload: _createEs6Js.Preload,
 	  Elements: _Elements2.default,
 	  Sounds: _Sounds2.default,
 	  status: status
 	};
 	
 	exports.default = evolve;
-	exports.Create = _createEs6Js2.default;
+	exports.Easel = _createEs6Js.Easel;
+	exports.Tween = _createEs6Js.Tween;
+	exports.Preload = _createEs6Js.Preload;
 	exports.Elements = _Elements2.default;
 	exports.Sounds = _Sounds2.default;
 
@@ -2112,7 +2114,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 	
 	module.exports = {
-	  version: '0.1.1',
+	  version: '0.1.2',
 	  build: new Date()
 	};
 
