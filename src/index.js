@@ -23,3 +23,10 @@ const evolve = {
 };
 
 export default evolve;
+
+export {
+  Create,
+  Elements,
+  Sounds,
+  Translations,
+};
