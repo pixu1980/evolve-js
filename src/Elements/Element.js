@@ -388,6 +388,7 @@ export default class Element extends Easel.Container {
       }
     } else {
       this.settings.shadow = null;
+      
       this.inherit({
         shadow: null,
       });
