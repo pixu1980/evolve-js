@@ -32,7 +32,7 @@ module.exports = {
     new webpack.ProvidePlugin({
       _: 'lodash',
       ƒ: 'flavor-js',
-      createjs: 'create-es6-js',
+      'create-es6-js': 'create-es6-js',
     }),
     new webpack.optimize.OccurrenceOrderPlugin,
     // new webpack.optimize.UglifyJsPlugin({

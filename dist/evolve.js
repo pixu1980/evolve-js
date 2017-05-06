@@ -886,7 +886,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* 1 */
 	/***/ (function(module, exports, __webpack_require__) {
 	
-		var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(createjs, module, global) {/*!
+		var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/*!
 		* CreateJS
 		* Visit http://createjs.com/ for documentation, updates and examples.
 		*
@@ -27896,7 +27896,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		
 		module.exports = scope.createjs;
 		
-		/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(2)(module), (function() { return this; }())))
+		/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module), (function() { return this; }())))
 	
 	/***/ }),
 	/* 2 */
@@ -27921,7 +27921,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		/* WEBPACK VAR INJECTION */(function(module) {'use strict';
 		
 		module.export = {
-		  version: '0.0.9',
+		  version: '0.1.1',
 		  build: new Date()
 		};
 		/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
@@ -46567,7 +46567,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 	
 	module.exports = {
-	  version: '0.0.6',
+	  version: '0.0.7',
 	  build: new Date()
 	};
 
