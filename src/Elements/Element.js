@@ -1,4 +1,4 @@
-import Create from 'create-es6-js';
+import {Easel} from 'create-es6-js';
 import ElementHelpers from './ElementHelpers';
 
 /**
@@ -10,7 +10,7 @@ import ElementHelpers from './ElementHelpers';
  * @type {Element}
  * @public
  */
-export default class Element extends Create.Easel.Container {
+export default class Element extends Easel.Container {
   constructor(options = {}) {
     super();
 
@@ -322,7 +322,7 @@ export default class Element extends Create.Easel.Container {
     if (!!this.settings.mask) {
       this.maskShape = this.settings.mask;
 
-      if (!(this.settings.mask instanceof Create.Easel.Shape) && !(this.settings.mask instanceof Create.Easel.DisplayObject)) {
+      if (!(this.settings.mask instanceof Easel.Shape) && !(this.settings.mask instanceof Easel.DisplayObject)) {
         this.maskBounds = [0, 0, this.settings.size.width * this.settings.scale.x, this.settings.size.height * this.settings.scale.y];
 
         if (Object.isObject(this.settings.mask)) {
@@ -377,8 +377,8 @@ export default class Element extends Create.Easel.Container {
             this.settings.shadow.blur,
           ];
 
-          shadow = new Create.Easel.Shadow(...shadowSettings);
-        } else if (this.settings.shadow instanceof Create.Easel.Shadow) {
+          shadow = new Easel.Shadow(...shadowSettings);
+        } else if (this.settings.shadow instanceof Easel.Shadow) {
           shadow = this.settings.shadow;
         }
 
