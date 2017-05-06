@@ -30,5 +30,3 @@ bower_components/
 node_modules/
 
 # Brunch output folder.
-dist/
-public/
