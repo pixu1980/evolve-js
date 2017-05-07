@@ -1,4 +1,4 @@
-import ElementHelpers from './ElementHelpers';
+import Helpers from './Helpers';
 import Element from './Element';
 
 /**
@@ -48,7 +48,7 @@ export default class ImageElement extends Element {
   }
 
   preDrawElements() {
-    this.image = ElementHelpers.createImage(this.settings.image);
+    this.image = Helpers.createImage(this.settings.image);
     this.imageBounds = this.image.getBounds();
 
     if(!this.settings.size.force) {
@@ -74,6 +74,6 @@ export default class ImageElement extends Element {
     super.drawElements();
 
     this.addChild(this.image);
-    ElementHelpers.align(this.image, null, 'center middle', true);
+    Helpers.align(this.image, null, 'center middle', true);
   }
 }

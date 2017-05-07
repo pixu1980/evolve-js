@@ -1,5 +1,5 @@
-import {Easel} from 'create-es6-js';
-import ElementHelpers from './ElementHelpers';
+import Draw from '../Draw';
+import Helpers from './Helpers';
 
 /**
  * constructs an Element instance
@@ -10,7 +10,7 @@ import ElementHelpers from './ElementHelpers';
  * @type {Element}
  * @public
  */
-export default class Element extends Easel.Container {
+export default class Element extends Draw.Container {
   constructor(options = {}) {
     super();
 
@@ -114,7 +114,7 @@ export default class Element extends Easel.Container {
   }
 
   drawBackgroundElements() {
-    this.background = ElementHelpers.createRect(this.settings.pick(['fill', 'stroke']), ...this.bounds);
+    this.background = Helpers.createRect(this.settings.pick(['fill', 'stroke']), ...this.bounds);
     this.addChild(this.background);
   }
 
@@ -130,10 +130,10 @@ export default class Element extends Easel.Container {
 
   drawOverlayElements() {
     if (!!this.settings.regPoint) {
-      this.regPoint = ElementHelpers.createCircle(this.settings.regPoint, ...this.bounds);
+      this.regPoint = Helpers.createCircle(this.settings.regPoint, ...this.bounds);
       this.addChild(this.regPoint);
 
-      ElementHelpers.align(this.regPoint, null, 'center middle', false);
+      Helpers.align(this.regPoint, null, 'center middle', false);
     }
   }
 
@@ -306,7 +306,7 @@ export default class Element extends Easel.Container {
    * @memberOf Element
    * @method setMask
    * @instance
-   * @param {Object|Shadow} maskOptions can be an object with {color, x, y, blur}<br>or directly an instance of Shadow (EaselJS)
+   * @param {Object|Shadow} maskOptions can be an object with {color, x, y, blur}<br>or directly an instance of Shadow (DrawJS)
    * @param {Boolean} force ....
    * @return {Element} to make chainable the method
    */
@@ -322,15 +322,15 @@ export default class Element extends Easel.Container {
     if (!!this.settings.mask) {
       this.maskShape = this.settings.mask;
 
-      if (!(this.settings.mask instanceof Easel.Shape) && !(this.settings.mask instanceof Easel.DisplayObject)) {
+      if (!(this.settings.mask instanceof Draw.Shape) && !(this.settings.mask instanceof Draw.DisplayObject)) {
         this.maskBounds = [0, 0, this.settings.size.width * this.settings.scale.x, this.settings.size.height * this.settings.scale.y];
 
         if (Object.isObject(this.settings.mask)) {
           this.maskBounds = [0, 0, this.settings.size.width * this.settings.scale.x * this.settings.mask.scale, this.settings.size.height * this.settings.scale.y * this.settings.mask.scale];
-          this.maskShape = ElementHelpers.createRect(this.settings.mask.pick(['fill', 'stroke']), ...this.maskBounds);
+          this.maskShape = Helpers.createRect(this.settings.mask.pick(['fill', 'stroke']), ...this.maskBounds);
         } else if (Number.isNumber(this.settings.mask)) {
           this.maskBounds = [0, 0, this.settings.size.width * this.settings.scale.x * this.settings.mask, this.settings.size.height * this.settings.scale.y * this.settings.mask];
-          this.maskShape = ElementHelpers.createRect(this.settings.pick(['fill', 'stroke']), ...this.maskBounds);
+          this.maskShape = Helpers.createRect(this.settings.pick(['fill', 'stroke']), ...this.maskBounds);
         }
 
         this.maskShape.inherit({
@@ -354,7 +354,7 @@ export default class Element extends Easel.Container {
    * @memberOf Element
    * @method setShadow
    * @instance
-   * @param {Object|Shadow} shadowOptions can be an object with {color, x, y, blur}<br>or directly an instance of Shadow (EaselJS)
+   * @param {Object|Shadow} shadowOptions can be an object with {color, x, y, blur}<br>or directly an instance of Shadow (DrawJS)
    * @param {Boolean} force ....
    * @return {Element} to make chainable the method
    */
@@ -377,8 +377,8 @@ export default class Element extends Easel.Container {
             this.settings.shadow.blur,
           ];
 
-          shadow = new Easel.Shadow(...shadowSettings);
-        } else if (this.settings.shadow instanceof Easel.Shadow) {
+          shadow = new Draw.Shadow(...shadowSettings);
+        } else if (this.settings.shadow instanceof Draw.Shadow) {
           shadow = this.settings.shadow;
         }
 
@@ -525,7 +525,7 @@ export default class Element extends Easel.Container {
   }
 
   /**
-   * binds all events specified in the settings object for the Element instance, it supports all EaselJS classes events (eg. click, mouseover, etc...)
+   * binds all events specified in the settings object for the Element instance, it supports all DrawJS classes events (eg. click, mouseover, etc...)
    * @memberOf Element
    * @method bindEvents
    * @instance

@@ -1,4 +1,4 @@
-import ElementHelpers from './ElementHelpers';
+import Helpers from './Helpers';
 import Element from './Element';
 import TextElement from './TextElement';
 import LabelElement from './LabelElement';
@@ -12,7 +12,7 @@ import BoxElement from './BoxElement';
 /**
  * @module Elements
  * @description The Elements module of CreateJS Core Framework
- * @property {ElementHelpers} ElementHelpers all the helpers we need to draw the elements
+ * @property {Helpers} Helpers all the helpers we need to draw the elements
  * @property {Element} Element
  * @property {TextElement} TextElement
  * @property {LabelElement} LabelElement
@@ -23,8 +23,24 @@ import BoxElement from './BoxElement';
  * @property {SpriteElement} SpriteElement
  * @property {BoxElement} BoxElement
  */
-export default {
-  ElementHelpers,
+
+const Elements = {
+  Helpers,
+  Element,
+  TextElement,
+  LabelElement,
+  ButtonElement,
+  ListItemElement,
+  ListElement,
+  ImageElement,
+  SpriteElement,
+  BoxElement,
+};
+
+export default Elements;
+
+export {
+  Helpers,
   Element,
   TextElement,
   LabelElement,

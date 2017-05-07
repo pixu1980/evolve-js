@@ -1,4 +1,4 @@
-import ElementHelpers from './ElementHelpers';
+import Helpers from './Helpers';
 import Element from './Element';
 
 /**
@@ -48,7 +48,7 @@ export default class SpriteElement extends Element {
   }
 
   preDrawElements() {
-    this.sprite = ElementHelpers.createSprite(this.settings.spritesheet);
+    this.sprite = Helpers.createSprite(this.settings.spritesheet);
     this.spriteBounds = this.sprite.getBounds();
 
     if (!this.settings.size.force) {
@@ -73,7 +73,7 @@ export default class SpriteElement extends Element {
     super.drawElements();
     
     this.addChild(this.sprite);
-    ElementHelpers.align(this.sprite, null, 'center middle', true);
+    Helpers.align(this.sprite, null, 'center middle', true);
   }
 
   /**

@@ -1,5 +1,5 @@
-import Create from 'create-es6-js';
-import ElementHelpers from './ElementHelpers';
+import Draw from 'create-es6-js';
+import Helpers from './Helpers';
 import Element from './Element';
 
 /**
@@ -113,22 +113,22 @@ export default class TextElement extends Element {
 
   preDrawElements() {
     if(!!this.settings.outline) {
-      this.textOutline = ElementHelpers.createText(this.settings.text, this.settings.font, this.settings.outline.color).inherit({
+      this.textOutline = Helpers.createText(this.settings.text, this.settings.font, this.settings.outline.color).inherit({
         textAlign: 'center',
         textBaseline: 'middle',
         lineHeight: this.settings.lineHeight || null,
         lineWidth: this.settings.maxWidth || null,
         outline: this.settings.outline.size,
-        shadow: !!this.settings.shadow ? new Create.Easel.Shadow(...this.settings.shadow) : null,
+        shadow: !!this.settings.shadow ? new Draw.Shadow(...this.settings.shadow) : null,
       });
     }
 
-    this.text = ElementHelpers.createText(this.settings.text, this.settings.font, this.settings.color).inherit({
+    this.text = Helpers.createText(this.settings.text, this.settings.font, this.settings.color).inherit({
       textAlign: 'center',
       textBaseline: 'middle',
       lineHeight: this.settings.lineHeight || null,
       lineWidth: this.settings.maxWidth || null,
-      shadow: !!this.settings.shadow ? new Create.Easel.Shadow(...this.settings.shadow) : null,
+      shadow: !!this.settings.shadow ? new Draw.Shadow(...this.settings.shadow) : null,
     });
 
     this.computeBounds();

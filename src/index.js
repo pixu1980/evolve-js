@@ -1,7 +1,9 @@
-import {Easel, Tween, Preload} from 'create-es6-js';
-
+import Core from './Core';
+import Draw from './Draw';
+import Anim from './Anim';
 import Elements from './Elements';
-import Sounds from './Sounds';
+import Preload from './Preload';
+import Sound from './Sound';
 
 import release from '../release';
 
@@ -14,20 +16,22 @@ const status = {
 console.log('EvolveJS initialized', status);
 
 const evolve = {
-  Easel,
-  Tween,
+  Core,
+  Draw,
+  Anim,
   Preload,
+  Sound,
   Elements,
-  Sounds,
   status,
 };
 
 export default evolve;
 
 export {
-  Easel,
-  Tween,
+  Core,
+  Draw,
+  Anim,
   Preload,
+  Sound,
   Elements,
-  Sounds,
 };

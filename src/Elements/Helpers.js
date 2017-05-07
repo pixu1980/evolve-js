@@ -1,17 +1,17 @@
-import {Easel, Tween} from 'create-es6-js';
+import Draw from '../Draw';
 
 /**
- * @class ElementHelpers
+ * @class Helpers
  * @classdesc all the helpers we need to draw the elements
  */
-export default class ElementHelpers {
+export default class Helpers {
 
   /**
-   * sets the box size of an EaselJS element
-   * @memberOf ElementHelpers
+   * sets the box size of an DrawJS element
+   * @memberOf Helpers
    * @method setBoxSize
    * @static
-   * @param {Object|Container|Element} element can be an Object, an EaselJS instance, a CreateJS Core Elements instance
+   * @param {Object|Container|Element} element can be an Object, an DrawJS instance, a CreateJS Core Elements instance
    * @param {Number} width the width
    * @param {Number} height the height
    * @param {Boolean} css specity if you want to override also the css box size properties
@@ -30,11 +30,11 @@ export default class ElementHelpers {
   }
 
   /**
-   * sets the scale factor of an EaselJS element
-   * @memberOf ElementHelpers
+   * sets the scale factor of an DrawJS element
+   * @memberOf Helpers
    * @method scale
    * @static
-   * @param {Object|Container|Element} element can be an Object, an EaselJS instance, a CreateJS Core Elements instance
+   * @param {Object|Container|Element} element can be an Object, an DrawJS instance, a CreateJS Core Elements instance
    * @param {Number|Object} scale the scale factor to be used for both scaleX and scaleY
    * @return {Object|Container|Element}
    */
@@ -47,10 +47,10 @@ export default class ElementHelpers {
 
   /**
    * aligns the reg point or an element
-   * @memberOf ElementHelpers
+   * @memberOf Helpers
    * @method alignRegPoint
    * @static
-   * @param {Object|Container|Element} element can be an Object, an EaselJS instance, a CreateJS Core Elements instance
+   * @param {Object|Container|Element} element can be an Object, an DrawJS instance, a CreateJS Core Elements instance
    * @param {String} mode can be a couple of word for horizontal or vertical align, in any order<br>
    *   accepts the following modes<br>
    *   <ul>
@@ -73,11 +73,11 @@ export default class ElementHelpers {
 
   /**
    * Aligns an element (horizontally, vertically or both) based on it's parent bounds.
-   * @memberOf ElementHelpers
+   * @memberOf Helpers
    * @method align
    * @static
-   * @param {Object|Container|Element} element can be an Object, an EaselJS instance, a CreateJS Core Elements instance
-   * @param {null|Object|Container|Element} parent can be an Object, an EaselJS instance, a CreateJS Core Elements instance<br>
+   * @param {Object|Container|Element} element can be an Object, an DrawJS instance, a CreateJS Core Elements instance
+   * @param {null|Object|Container|Element} parent can be an Object, an DrawJS instance, a CreateJS Core Elements instance<br>
    *   if null, it takes automatically the parent property of element parameter
    * @param {String} mode can be a couple of word for horizontal or vertical align, in any order<br>
    *   accepts the following modes<br>
@@ -118,7 +118,7 @@ export default class ElementHelpers {
     if(horizontalModes.contains(modes)) {
       if(modes.contains('center')) {
         position.inherit({
-          x: parentBounds.width * 0.5 + (!!regPoint && !(element instanceof Easel.Bitmap) ? elementBounds.width * 0.5 : 0),
+          x: parentBounds.width * 0.5 + (!!regPoint && !(element instanceof Draw.Bitmap) ? elementBounds.width * 0.5 : 0),
         });
       } else if(modes.contains('left')) {
         position.inherit({
@@ -134,7 +134,7 @@ export default class ElementHelpers {
     if(verticalModes.contains(modes)) {
       if(modes.contains('middle')) {
         position.inherit({
-          y: parentBounds.height * 0.5 + (!!regPoint && !(element instanceof Easel.Bitmap) ? elementBounds.width * 0.5 : 0),
+          y: parentBounds.height * 0.5 + (!!regPoint && !(element instanceof Draw.Bitmap) ? elementBounds.width * 0.5 : 0),
         });
       } else if(modes.contains('top')) {
         position.inherit({
@@ -151,11 +151,11 @@ export default class ElementHelpers {
   }
 
   /**
-   * creates an EaselJS Container instance based on bounds parameters
-   * @memberOf ElementHelpers
+   * creates an DrawJS Container instance based on bounds parameters
+   * @memberOf Helpers
    * @method createContainer
    * @statuc
-   * @param {Arguments} bounds the bounds parameter will be passed to setBounds method of EaselJS Container class<br>
+   * @param {Arguments} bounds the bounds parameter will be passed to setBounds method of DrawJS Container class<br>
    *   so it has to be an array with this sequence<br>
    *   <ul>
    *     <li>{Number} x</li>
@@ -166,7 +166,7 @@ export default class ElementHelpers {
    * @return {Container}
    */
   static createContainer(...bounds) {
-    const container = (new Easel.Container()).inherit({
+    const container = (new Draw.Container()).inherit({
       x: bounds[0],
       y: bounds[1],
     });
@@ -177,8 +177,8 @@ export default class ElementHelpers {
   }
 
   /**
-   * creates an EaselJS Graphics instance
-   * @memberOf ElementHelpers
+   * creates an DrawJS Graphics instance
+   * @memberOf Helpers
    * @method createGraphics
    * @static
    * @param {Object} options the options can contain
@@ -189,7 +189,7 @@ export default class ElementHelpers {
    * @param {String|Object} options.stroke stroke options, if string it creates a stroke with size 1
    * @param {Number} options.stroke.size the size
    * @param {String} options.stroke.color the color
-   * @param {Arguments} bounds the bounds parameter will be passed to setBounds method of EaselJS Container class<br>
+   * @param {Arguments} bounds the bounds parameter will be passed to setBounds method of DrawJS Container class<br>
    *   so it has to be an array with this sequence<br>
    *   <ul>
    *     <li>{Number} x</li>
@@ -207,7 +207,7 @@ export default class ElementHelpers {
 
     const settings = defaults.inherit(true, options);
 
-    const graphics = new Easel.Graphics();
+    const graphics = new Draw.Graphics();
 
     if(!!settings.fill) {
       if(Object.isObject(settings.fill)) {
@@ -237,8 +237,8 @@ export default class ElementHelpers {
   }
 
   /**
-   * creates an EaselJS Rect Shape instance
-   * @memberOf ElementHelpers
+   * creates an DrawJS Rect Shape instance
+   * @memberOf Helpers
    * @method createRect
    * @static
    * @param {Object} options the options can contain
@@ -252,8 +252,8 @@ export default class ElementHelpers {
    * @param {Boolean|Number|Array} options.stroke.radius
    *   <br>if false it draws a rect
    *   <br>if Number it draws a round rect
-   *   <br>if Array it draws a round rect complex (array has to respect the arguments sequence of drawRoundRectComplex method of EaselJS Graphics class
-   * @param {Arguments} bounds the bounds parameter will be passed to setBounds method of EaselJS Container class<br>
+   *   <br>if Array it draws a round rect complex (array has to respect the arguments sequence of drawRoundRectComplex method of DrawJS Graphics class
+   * @param {Arguments} bounds the bounds parameter will be passed to setBounds method of DrawJS Container class<br>
    *   so it has to be an array with this sequence<br>
    *   <ul>
    *     <li>{Number} x</li>
@@ -279,15 +279,15 @@ export default class ElementHelpers {
     graphics.endFill();
     graphics.endStroke();
 
-    const rect = new Easel.Shape(graphics);
+    const rect = new Draw.Shape(graphics);
     rect.setBounds(...bounds);
 
     return rect;
   }
 
   /**
-   * creates an EaselJS Circle Shape instance
-   * @memberOf ElementHelpers
+   * creates an DrawJS Circle Shape instance
+   * @memberOf Helpers
    * @method createCircle
    * @static
    * @param {Object} options the options can contain
@@ -299,7 +299,7 @@ export default class ElementHelpers {
    * @param {Number} options.stroke.size the size
    * @param {String} options.stroke.color the color
    * @param {Number} options.radius the radius of the circle
-   * @param {Arguments} bounds the bounds parameter will be passed to setBounds method of EaselJS Container class<br>
+   * @param {Arguments} bounds the bounds parameter will be passed to setBounds method of DrawJS Container class<br>
    *   so it has to be an array with this sequence<br>
    *   <ul>
    *     <li>{Number} x</li>
@@ -319,47 +319,47 @@ export default class ElementHelpers {
     const graphics = this.createGraphics(settings, ...bounds);
     graphics.drawCircle(0, 0, settings.radius);
 
-    const circle = new Easel.Shape(graphics);
+    const circle = new Draw.Shape(graphics);
     circle.setBounds(...bounds);
 
     return circle;
   }
 
   /**
-   * creates an EaselJS Text instance
-   * @memberOf ElementHelpers
+   * creates an DrawJS Text instance
+   * @memberOf Helpers
    * @method createText
    * @static
    * @param {String} text the text to be rendered
-   * @param {String} font font options as expected by the EaselJS Text class
+   * @param {String} font font options as expected by the DrawJS Text class
    * @param {String} color the color of the text
    * @return {Text}
    */
   static createText(text, font, color) {
-    return new Easel.Text(text, font, color);
+    return new Draw.Text(text, font, color);
   }
 
   /**
-   * creates an EaselJS Bitmap instance
-   * @memberOf ElementHelpers
+   * creates an DrawJS Bitmap instance
+   * @memberOf Helpers
    * @method createImage
    * @static
    * @param {HTMLElement} image the preloaded DOM element representing the image
    * @return {Bitmap}
    */
   static createImage(image) {
-    return new Easel.Bitmap(image);
+    return new Draw.Bitmap(image);
   }
 
   /**
-   * creates an EaselJS Sprite instance
-   * @memberOf ElementHelpers
+   * creates an DrawJS Sprite instance
+   * @memberOf Helpers
    * @method createSprite
    * @static
    * @param {HTMLElement} spritesheet the preloaded DOM element representing the sprite
    * @return {Sprite}
    */
   static createSprite(spritesheet) {
-    return new Easel.Sprite(spritesheet);
+    return new Draw.Sprite(spritesheet);
   }
 }
