@@ -2,6 +2,7 @@ import Core from './Core';
 import Draw from './Draw';
 import Anim from './Anim';
 import Elements from './Elements';
+import Components from './Components';
 import Preload from './Preload';
 import Sound from './Sound';
 
@@ -22,6 +23,7 @@ const evolve = {
   Preload,
   Sound,
   Elements,
+  Components,
   status,
 };
 
@@ -34,4 +36,5 @@ export {
   Preload,
   Sound,
   Elements,
+  Components,
 };

@@ -1,6 +1,5 @@
 import { Sound } from 'create-es6-js';
 
-import SoundManager from './SoundManager';
 import SoundElement from './SoundElement';
 
 const sound = {
@@ -18,7 +17,6 @@ const sound = {
   AudioSprite: Sound.AudioSprite,
   PlayPropsConfig: Sound.PlayPropsConfig,
   Sound: Sound.Sound,
-  SoundManager,
   SoundElement,
 };
 
