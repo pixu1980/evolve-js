@@ -111,7 +111,7 @@ export default class TextElement extends Element {
     });
   }
 
-  preDrawElements() {
+  preDrawElement() {
     if(!!this.settings.outline) {
       this.textOutline = Helpers.createText(this.settings.text, this.settings.font, this.settings.outline.color).inherit({
         textAlign: 'center',
@@ -134,7 +134,7 @@ export default class TextElement extends Element {
     this.computeBounds();
     this.centerText();
 
-    super.preDrawElements();
+    return super.preDrawElement();
   }
 
 

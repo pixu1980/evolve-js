@@ -11,10 +11,6 @@ import Element from './Element';
  * @public
  */
 export default class SpriteElement extends Element {
-  constructor(options = {}) {
-    super(options);
-  }
-
   /**
    * Initialize default settings for SpriteElement
    * @memberOf SpriteElement
@@ -60,7 +56,7 @@ export default class SpriteElement extends Element {
       });
     }
 
-    super.preDrawElements();
+    return super.preDrawElements();
   }
   /**
    * draws all graphic elements of the SpriteElement instance

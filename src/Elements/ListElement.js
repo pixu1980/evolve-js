@@ -11,10 +11,6 @@ import ListItemElement from './ListItemElement';
  * @type {ListElement}
  */
 export default class ListElement extends Element {
-  constructor(options = {}) {
-    super(options);
-  }
-
   /**
    * Initialize default settings for List Element
    * @memberOf ListElement
@@ -72,10 +68,10 @@ export default class ListElement extends Element {
     }
   }
 
-  preDrawElements() {
+  preDrawElement() {
     this.computeBounds();
 
-    super.preDrawElements();
+    return super.preDrawElement();
   }
 
 

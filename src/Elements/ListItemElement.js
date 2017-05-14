@@ -11,10 +11,6 @@ import ImageElement from './ImageElement';
  * @public
  */
 export default class ListItemElement extends ButtonElement {
-  constructor(options = {}) {
-    super(options);
-  }
-
   /**
    * Initialize default settings for ListItemElement instance
    * @memberOf ListItemElement

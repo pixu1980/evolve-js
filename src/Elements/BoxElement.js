@@ -11,10 +11,6 @@ import LabelElement from './LabelElement';
  * @public
  */
 export default class BoxElement extends Element {
-  constructor(options = {}) {
-    super(options);
-  }
-
   /**
    * Initialize default settings for Box Element
    * @memberOf BoxElement

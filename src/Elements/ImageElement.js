@@ -11,10 +11,6 @@ import Element from './Element';
  * @public
  */
 export default class ImageElement extends Element {
-  constructor(options = {}) {
-    super(options);
-  }
-
   /**
    * Initialize default settings for ImageElement
    * @memberOf ImageElement
@@ -47,7 +43,7 @@ export default class ImageElement extends Element {
     return this;
   }
 
-  preDrawElements() {
+  preDrawElement() {
     this.image = Helpers.createImage(this.settings.image);
     this.imageBounds = this.image.getBounds();
 
@@ -60,7 +56,7 @@ export default class ImageElement extends Element {
       });
     }
 
-    super.preDrawElements();
+    return super.preDrawElement();
   }
 
   /**

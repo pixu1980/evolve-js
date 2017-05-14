@@ -10,10 +10,6 @@ import TextElement from './TextElement';
  * @type {LabelElement}
  */
 export default class LabelElement extends TextElement {
-  constructor(options = {}) {
-    super(options);
-  }
-
   /**
    * Initialize default settings for Label Element
    * @memberOf LabelElement

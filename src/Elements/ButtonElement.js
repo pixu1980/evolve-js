@@ -10,10 +10,6 @@ import LabelElement from './LabelElement';
  * @public
  */
 export default class ButtonElement extends LabelElement {
-  constructor(options = {}) {
-    super(options);
-  }
-
   /**
    * Initialize default settings for Button Element
    * @memberOf ButtonElement

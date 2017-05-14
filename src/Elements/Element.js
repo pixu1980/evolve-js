@@ -14,16 +14,24 @@ export default class Element extends Draw.Container {
   constructor(options = {}) {
     super();
 
-    this.initDefaults();
-    this.initSettings(options);
+    this.preInit(options).then(() => {
+      return this.drawElement();
+    }).then(() => {
+      this.bindEvents();
+      return this.init();
+    }).then(() => {
+      this.postInit();
+    });
+  }
 
-    this.initData();
+  preInit(options) {
+    return new Promise((resolve, reject) => {
+      this.initDefaults();
+      this.initSettings(options);
+      this.initData();
 
-    this.drawElement();
-
-    this.bindEvents();
-
-    this.init();
+      Function.isFunction(resolve) && resolve();
+    });
   }
 
   /**
@@ -102,15 +110,18 @@ export default class Element extends Draw.Container {
     this.data = {};
   }
 
-  preDrawElements() {
-    this.setScale(this.settings.scale);
+  preDrawElement() {
+    return new Promise((resolve, reject) => {
+      this.setScale(this.settings.scale);
 
-    if (this.settings.parent) {
-      this.settings.parent.addChild(this);
-    }
+      if (this.settings.parent) {
+        this.settings.parent.addChild(this);
+      }
 
-    this.setComputedBounds(this.settings.size);
-    this.setReg();
+      this.setComputedBounds(this.settings.size);
+      this.setReg();
+      Function.isFunction(resolve) && resolve();
+    });
   }
 
   drawBackgroundElements() {
@@ -137,12 +148,16 @@ export default class Element extends Draw.Container {
     }
   }
 
-  postDrawElements() {
-    if (!!this.settings.align) {
-      this.align(null, this.settings.align);
-    } else {
-      this.setPosition(this.settings.position);
-    }
+  postDrawElement() {
+    return new Promise((resolve, reject) => {
+      if (!!this.settings.align) {
+        this.align(null, this.settings.align);
+      } else {
+        this.setPosition(this.settings.position);
+      }
+
+      Function.isFunction(resolve) && resolve();
+    });
   }
 
   /**
@@ -152,16 +167,19 @@ export default class Element extends Draw.Container {
    * @instance
    */
   drawElement() {
-    this.preDrawElements();
+    return new Promise((resolve, reject) => {
+      this.preDrawElement().then(() => {
+        this.drawBackgroundElements();
+        this.drawElements();
+        this.drawBehaviorElements();
+        this.drawOverlayElements();
 
-    this.drawBackgroundElements();
-    this.drawElements();
-    this.drawBehaviorElements();
-    this.drawOverlayElements();
-
-    this.postDrawElements();
+        return this.postDrawElement();
+      }).then(() => {
+        Function.isFunction(resolve) && resolve();
+      });
+    });
   }
-
 
   /**
    * sets to center/middle the regPoint of the Element instance
@@ -388,7 +406,7 @@ export default class Element extends Draw.Container {
       }
     } else {
       this.settings.shadow = null;
-      
+
       this.inherit({
         shadow: null,
       });
@@ -547,5 +565,13 @@ export default class Element extends Draw.Container {
    * @instance
    */
   init() {
+    return new Promise((resolve, reject) => {
+      Function.isFunction(resolve) && resolve();
+    });
+  }
+
+
+  postInit() {
+    //TODO:
   }
 }
