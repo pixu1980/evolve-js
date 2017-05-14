@@ -2,8 +2,8 @@ import Draw from '../Draw';
 import Helpers from './Helpers';
 
 export default class StageElement extends Draw.Stage {
-  constructor(options = {}) {
-    super();
+  constructor(canvas = null, options = {}) {
+    super(canvas);
 
     this.initDefaults();
     this.initSettings(options);
