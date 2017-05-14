@@ -20,7 +20,7 @@ export default class StageElement extends Draw.Stage {
           width: 0,
           height: 0,
         },
-      }.inherit(defaults),
+      },
     });
   }
 
