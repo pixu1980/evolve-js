@@ -1,6 +1,6 @@
 import {Element} from '../Elements';
 
-export default class Component extends Element.Element {
+export default class Component extends Element {
   constructor(options = {}) {
     super(options);
   }

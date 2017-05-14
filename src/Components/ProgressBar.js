@@ -3,10 +3,6 @@ import Anim from '../Anim';
 import Component from './Component';
 
 export default class ProgressBar extends Component {
-  constructor(options = {}) {
-    super(options);
-  }
-
   initDefaults(defaults) {
     super.initDefaults({
       fill: '#fff',
@@ -32,7 +28,6 @@ export default class ProgressBar extends Component {
 
     super.initSettings(parsedOptions);
   }
-
 
   drawElements() {
     super.drawElements();
