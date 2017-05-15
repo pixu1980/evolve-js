@@ -1,4 +1,5 @@
 import { Preload } from 'create-es6-js';
+import PreloaderElement from './PreloaderElement';
 
 const preload = {
   DataUtils: Preload.DataUtils,
@@ -30,6 +31,7 @@ const preload = {
   LoadQueue: Preload.LoadQueue,
   Methods: Preload.Methods,
   Types: Preload.Types,
+  PreloaderElement,
 };
 
 export default preload;
