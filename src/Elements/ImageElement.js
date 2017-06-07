@@ -46,6 +46,11 @@ export default class ImageElement extends Element {
   preDrawElement() {
     this.image = Helpers.createImage(this.settings.image);
     this.imageBounds = this.image.getBounds();
+    
+    this.image.inherit({
+      regX: this.imageBounds.width * 0.5,
+      regY: this.imageBounds.height * 0.5,
+    });
 
     if(!this.settings.size.force) {
       this.settings.inherit({
@@ -56,7 +61,7 @@ export default class ImageElement extends Element {
       });
     }
 
-    return super.preDrawElement();
+    super.preDrawElement();
   }
 
   /**

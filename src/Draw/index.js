@@ -30,6 +30,7 @@ const draw = {
   SpriteSheet: Easel.SpriteSheet,
   SpriteStage: Easel.SpriteStage,
   Stage: Easel.Stage,
+  StageGL: Easel.StageGL,
   Text: Easel.Text,
 };
 

@@ -71,7 +71,7 @@ export default class ListElement extends Element {
   preDrawElement() {
     this.computeBounds();
 
-    return super.preDrawElement();
+    super.preDrawElement();
   }
 
 

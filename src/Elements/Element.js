@@ -14,24 +14,29 @@ export default class Element extends Draw.Container {
   constructor(options = {}) {
     super();
 
-    this.preInit(options).then(() => {
-      return this.drawElement();
-    }).then(() => {
-      this.bindEvents();
-      return this.init();
-    }).then(() => {
-      this.postInit();
-    });
+    // this.preInit(options).then(() => {
+    //   return this.drawElement();
+    // }).then(() => {
+    //   this.bindEvents();
+    //   return this.init();
+    // }).then(() => {
+    //   this.postInit();
+    // });
+    this.preInit(options);
+    this.drawElement();
+    this.bindEvents();
+    this.init();
+    this.postInit();
   }
 
   preInit(options) {
-    return new Promise((resolve, reject) => {
-      this.initDefaults();
-      this.initSettings(options);
-      this.initData();
+    // return new Promise((resolve, reject) => {
+    this.initDefaults();
+    this.initSettings(options);
+    this.initData();
 
-      Function.isFunction(resolve) && resolve();
-    });
+    //   Function.isFunction(resolve) && resolve();
+    // });
   }
 
   /**
@@ -80,9 +85,38 @@ export default class Element extends Draw.Container {
         shadow: false,
         align: null,
         regPoint: false,
+        regPointAlign: 'center middle',
+        horizontalModes: ['left', 'center', 'right'],
+        verticalModes: ['top', 'middle', 'bottom'],
         events: {},
       }.inherit(defaults),
     });
+  }
+
+  getAlignSettings(alignOptions = null) {
+    const alignSettings = {
+      horizontal: null,
+      vertical: null,
+    };
+
+    if (!!alignOptions) {
+      if (String.isString(alignOptions) || Array.isArray(alignOptions)) {
+        let alignOptionsArray = alignOptions;
+
+        if (String.isString(alignOptions)) {
+          alignOptionsArray = alignOptions.split(' ');
+        }
+
+        alignSettings.inherit({
+          horizontal: this.settings.horizontalModes.intersection(alignOptionsArray).first(),
+          vertical: this.settings.verticalModes.intersection(alignOptionsArray).first(),
+        });
+      } else if (Object.isObject(alignOptions) && (!!alignOptions.horizontal || !!alignOptions.vertical)) {
+        alignSettings.inherit(alignOptions);
+      }
+    }
+
+    return alignSettings;
   }
 
   /**
@@ -98,6 +132,11 @@ export default class Element extends Draw.Container {
     });
 
     !!this.settings.debug && this.settings.inherit(this.debug);
+
+    this.settings.inherit({
+      align: this.getAlignSettings(this.settings.align),
+      regPointAlign: this.getAlignSettings(this.settings.regPointAlign),
+    });
   }
 
   /**
@@ -111,17 +150,16 @@ export default class Element extends Draw.Container {
   }
 
   preDrawElement() {
-    return new Promise((resolve, reject) => {
-      this.setScale(this.settings.scale);
+    // return new Promise((resolve, reject) => {
+    if (this.settings.parent) {
+      this.settings.parent.addChild(this);
+    }
 
-      if (this.settings.parent) {
-        this.settings.parent.addChild(this);
-      }
-
-      this.setComputedBounds(this.settings.size);
-      this.setReg();
-      Function.isFunction(resolve) && resolve();
-    });
+    this.setScale(this.settings.scale);
+    this.setComputedBounds(this.settings.size);
+    this.setReg(this.settings.regPointAlign);
+    //   Function.isFunction(resolve) && resolve();
+    // });
   }
 
   drawBackgroundElements() {
@@ -139,25 +177,93 @@ export default class Element extends Draw.Container {
     this.setCache(this.settings.cache);
   }
 
-  drawOverlayElements() {
+  drawRegPoint() {
     if (!!this.settings.regPoint) {
       this.regPoint = Helpers.createCircle(this.settings.regPoint, ...this.bounds);
       this.addChild(this.regPoint);
 
-      Helpers.align(this.regPoint, null, 'center middle', false);
+      this.regPoint.inherit({
+        x: this.regX,
+        y: this.regY,
+      });
+
+      this.regPointText = Helpers.createText('r:' + this.regX.toFixed(0) + 'x' + this.regY.toFixed(0) + '\np:' + this.getComputedBounds().x.toFixed(0) + 'x' + this.getComputedBounds().y.toFixed(0), '16px Verdana', '#fff').inherit({
+        textAlign: this.settings.regPointAlign.horizontal || 'center',
+        textBaseline: this.settings.regPointAlign.vertical || 'middle',
+      });
+
+      this.addChild(this.regPointText);
+
+      const regPointTextPosition = {
+        x: this.regX,
+        y: this.regY,
+      };
+
+      if (this.settings.horizontalModes[0] === this.settings.regPointAlign.horizontal) {
+        regPointTextPosition.x += 5;
+      } else if (this.settings.horizontalModes[2] === this.settings.regPointAlign.horizontal) {
+        regPointTextPosition.x -= 5;
+      }
+
+      if (this.settings.verticalModes[0] === this.settings.regPointAlign.vertical) {
+        regPointTextPosition.y += 5;
+      } else if (this.settings.verticalModes[1] === this.settings.regPointAlign.vertical) {
+        if (this.settings.horizontalModes[1] === this.settings.regPointAlign.horizontal) {
+          regPointTextPosition.y += 10;
+        } else {
+          regPointTextPosition.y -= 10;
+        }
+      } else if (this.settings.verticalModes[2] === this.settings.regPointAlign.vertical) {
+        regPointTextPosition.y -= 20;
+      }
+
+      this.regPointText.inherit(regPointTextPosition);
     }
   }
 
-  postDrawElement() {
-    return new Promise((resolve, reject) => {
-      if (!!this.settings.align) {
-        this.align(null, this.settings.align);
-      } else {
-        this.setPosition(this.settings.position);
-      }
+  drawBoundsTexts() {
+    if (!!this.settings.debug) {
+      this.boundsText = Helpers.createText('s:' + this.getComputedBounds().width.toFixed(0) + 'x' + this.getComputedBounds().height.toFixed(0), '16px Verdana', '#fff').inherit({
+        textAlign: this.settings.regPointAlign.horizontal === 'right' && this.settings.regPointAlign.vertical === 'bottom' ? 'center' : 'left',
+        textBaseline: 'middle',
+      });
 
-      Function.isFunction(resolve) && resolve();
-    });
+      this.addChild(this.boundsText);
+
+      const boundsTextAlign = this.settings.regPointAlign.horizontal === 'right' && this.settings.regPointAlign.vertical === 'bottom' ? 'center middle' : 'right bottom';
+
+      Helpers.align(this.boundsText, null, boundsTextAlign, false);
+
+      if (this.boundsText.textAlign === 'left') {
+        this.boundsText.inherit({
+          x: this.boundsText.x - 10,
+        });
+      }
+    }
+  }
+
+  drawOverlayElements() {
+    this.drawRegPoint();
+    this.drawBoundsTexts();
+  }
+
+  postDrawElement() {
+    // if(!!this.settings.scale) {
+    //   this.inherit({
+    //     scaleX: this.settings.scale.x,
+    //     scaleY: this.settings.scale.y,
+    //   });
+    // }
+
+    // return new Promise((resolve, reject) => {
+    // if (!!this.settings.align) {
+    //   this.align(null, this.settings.align);
+    // } else {
+    //   this.setPosition(this.settings.position);
+    // }
+
+    //   Function.isFunction(resolve) && resolve();
+    // });
   }
 
   /**
@@ -167,18 +273,27 @@ export default class Element extends Draw.Container {
    * @instance
    */
   drawElement() {
-    return new Promise((resolve, reject) => {
-      this.preDrawElement().then(() => {
-        this.drawBackgroundElements();
-        this.drawElements();
-        this.drawBehaviorElements();
-        this.drawOverlayElements();
+    // return new Promise((resolve, reject) => {
+    // this.preDrawElement().then(() => {
+    this.preDrawElement();
+    this.drawBackgroundElements();
+    this.drawElements();
+    this.drawBehaviorElements();
 
-        return this.postDrawElement();
-      }).then(() => {
-        Function.isFunction(resolve) && resolve();
-      });
-    });
+    if (!!this.settings.align) {
+      this.align(null, this.settings.align);
+    } else {
+      this.setPosition(this.settings.position);
+    }
+
+    this.drawOverlayElements();
+
+    // return this.postDrawElement();
+    this.postDrawElement();
+    //   }).then(() => {
+    //     Function.isFunction(resolve) && resolve();
+    //   });
+    // });
   }
 
   /**
@@ -187,11 +302,40 @@ export default class Element extends Draw.Container {
    * @method setReg
    * @instance
    */
-  setReg() {
-    this.inherit({
-      regX: this.settings.size.width * 0.5 * this.settings.scale.x,
-      regY: this.settings.size.height * 0.5 * this.settings.scale.y,
-    });
+  setReg(mode = 'center middle') {
+    const bounds = this.getBounds();
+    const regPointAlignSettings = this.getAlignSettings(mode);
+
+    const reg = {
+      regX: 0,
+      regY: 0,
+    };
+
+    if (!!regPointAlignSettings.horizontal) {
+      if (this.settings.horizontalModes[1] === regPointAlignSettings.horizontal) {
+        reg.inherit({
+          regX: bounds.width * 0.5,
+        });
+      } else if (this.settings.horizontalModes[2] === regPointAlignSettings.horizontal) {
+        reg.inherit({
+          regX: bounds.width,
+        });
+      }
+    }
+
+    if (!!regPointAlignSettings.vertical) {
+      if (this.settings.verticalModes[1] === regPointAlignSettings.vertical) {
+        reg.inherit({
+          regY: bounds.height * 0.5,
+        });
+      } else if (this.settings.verticalModes[2] === regPointAlignSettings.vertical) {
+        reg.inherit({
+          regY: bounds.height,
+        });
+      }
+    }
+
+    this.inherit(reg);
 
     return this;
   }
@@ -257,23 +401,28 @@ export default class Element extends Draw.Container {
 
     if (!!this.settings.scale) {
       const scale = {
-        scaleX: 1,
-        scaleY: 1,
+        x: 1,
+        y: 1,
       };
 
       if (Number.isNumber(this.settings.scale)) {
         scale.inherit({
-          scaleX: this.settings.scale,
-          scaleY: this.settings.scale,
+          x: this.settings.scale,
+          y: this.settings.scale,
         });
       } else if (Object.isObject(this.settings.scale)) {
         scale.inherit({
-          scaleX: this.settings.scale.x,
-          scaleY: this.settings.scale.y,
+          x: this.settings.scale.x,
+          y: this.settings.scale.y,
         });
       }
 
-      this.inherit(scale);
+      this.settings.scale = scale;
+
+      this.inherit({
+        scaleX: this.settings.scale.x,
+        scaleY: this.settings.scale.y,
+      });
     }
 
     return this;
@@ -440,6 +589,116 @@ export default class Element extends Draw.Container {
     return this;
   }
 
+  getAlignPosition(parentElement = null, mode = 'left top') {
+    if (!parentElement) {
+      parentElement = this.parent;
+    }
+
+    const parentBounds = parentElement.getBounds();
+    const bounds = this.getBounds();
+    const alignSettings = this.getAlignSettings(mode);
+
+    const position = {
+      x: 0,
+      y: 0,
+    };
+
+    if (!!alignSettings.horizontal) {
+      if (this.settings.horizontalModes[0] === alignSettings.horizontal) {
+        if (this.settings.horizontalModes[0] === this.settings.regPointAlign.horizontal) {
+          position.inherit({
+            x: 0,
+          });
+        } else if (this.settings.horizontalModes[1] === this.settings.regPointAlign.horizontal) {
+          position.inherit({
+            x: bounds.width * 0.5 * this.settings.scale.x,
+          });
+        } else if (this.settings.horizontalModes[2] === this.settings.regPointAlign.horizontal) {
+          position.inherit({
+            x: bounds.width * this.settings.scale.x,
+          });
+        }
+      } else if (this.settings.horizontalModes[1] === alignSettings.horizontal) {
+        if (this.settings.horizontalModes[0] === this.settings.regPointAlign.horizontal) {
+          position.inherit({
+            x: parentBounds.width * 0.5 - bounds.width * 0.5 * this.settings.scale.x,
+          });
+        } else if (this.settings.horizontalModes[1] === this.settings.regPointAlign.horizontal) {
+          position.inherit({
+            x: parentBounds.width * 0.5,
+          });
+        } else if (this.settings.horizontalModes[2] === this.settings.regPointAlign.horizontal) {
+          position.inherit({
+            x: parentBounds.width * 0.5 + bounds.width * 0.5 * this.settings.scale.x,
+          });
+        }
+      } else if (this.settings.horizontalModes[2] === alignSettings.horizontal) {
+        if (this.settings.horizontalModes[0] === this.settings.regPointAlign.horizontal) {
+          position.inherit({
+            x: parentBounds.width - bounds.width * this.settings.scale.x,
+          });
+        } else if (this.settings.horizontalModes[1] === this.settings.regPointAlign.horizontal) {
+          position.inherit({
+            x: parentBounds.width - bounds.width * 0.5 * this.settings.scale.x,
+          });
+        } else if (this.settings.horizontalModes[2] === this.settings.regPointAlign.horizontal) {
+          position.inherit({
+            x: parentBounds.width,
+          });
+        }
+      }
+    }
+
+    if (!!alignSettings.vertical) {
+      if (this.settings.verticalModes[0] === alignSettings.vertical) {
+        if (this.settings.verticalModes[0] === this.settings.regPointAlign.vertical) {
+          position.inherit({
+            y: 0,
+          });
+        } else if (this.settings.verticalModes[1] === this.settings.regPointAlign.vertical) {
+          position.inherit({
+            y: bounds.height * 0.5 * this.settings.scale.y,
+          });
+        } else if (this.settings.verticalModes[2] === this.settings.regPointAlign.vertical) {
+          position.inherit({
+            y: bounds.height * this.settings.scale.y,
+          });
+        }
+      } else if (this.settings.verticalModes[1] === alignSettings.vertical) {
+        if (this.settings.verticalModes[0] === this.settings.regPointAlign.vertical) {
+          position.inherit({
+            y: parentBounds.height * 0.5 - bounds.height * 0.5 * this.settings.scale.y,
+          });
+        } else if (this.settings.verticalModes[1] === this.settings.regPointAlign.vertical) {
+          position.inherit({
+            y: parentBounds.height * 0.5,
+          });
+        } else if (this.settings.verticalModes[2] === this.settings.regPointAlign.vertical) {
+          position.inherit({
+            y: parentBounds.height * 0.5 + bounds.height * 0.5 * this.settings.scale.y,
+          });
+        }
+      } else if (this.settings.verticalModes[2] === alignSettings.vertical) {
+        if (this.settings.verticalModes[0] === this.settings.regPointAlign.vertical) {
+          position.inherit({
+            y: parentBounds.height - bounds.height * this.settings.scale.y,
+          });
+        } else if (this.settings.verticalModes[1] === this.settings.regPointAlign.vertical) {
+          position.inherit({
+            y: parentBounds.height - bounds.height * 0.5 * this.settings.scale.y,
+          });
+        } else if (this.settings.verticalModes[2] === this.settings.regPointAlign.vertical) {
+          position.inherit({
+            y: parentBounds.height,
+          });
+        }
+      }
+    }
+
+
+    return position;
+  }
+
   /**
    * Aligns the Element instance, based on it's parent bounds or specified parentElement bounds and mode parameter
    * @memberOf Element
@@ -450,55 +709,8 @@ export default class Element extends Draw.Container {
    * @return {Element} to make chainable the method
    */
   align(parentElement = null, mode = 'left top') {
-    if (!parentElement) {
-      parentElement = this.parent;
-    }
-
-    const parentBounds = parentElement.getBounds();
-    const bounds = this.getBounds();
-    const modes = mode.toArray(' ');
-    const horizontalModes = ['left', 'center', 'right'];
-    const verticalModes = ['top', 'middle', 'bottom'];
-
-    const position = {
-      x: 0,
-      y: 0,
-    };
-
-    if (horizontalModes.contains(modes)) {
-      if (modes.contains('left')) {
-        position.inherit({
-          x: bounds.width * 0.5,
-        });
-      } else if (modes.contains('center')) {
-        position.inherit({
-          x: parentBounds.width * 0.5,
-        });
-      } else if (modes.contains('right')) {
-        position.inherit({
-          x: parentBounds.width - bounds.width * 0.5,
-        });
-      }
-    }
-
-    if (verticalModes.contains(modes)) {
-      if (modes.contains('top')) {
-        position.inherit({
-          y: bounds.height * 0.5,
-        });
-      } else if (modes.contains('middle')) {
-        position.inherit({
-          y: parentBounds.height * 0.5,
-        });
-      } else if (modes.contains('bottom')) {
-        position.inherit({
-          y: parentBounds.height - bounds.height * 0.5,
-        });
-      }
-    }
-
     this.settings.inherit({
-      position,
+      position: this.getAlignPosition(parentElement, mode),
     });
 
     this.setPosition(null, true);
@@ -531,14 +743,14 @@ export default class Element extends Draw.Container {
     const bounds = this.getBounds();
 
     return {
-      top: this.y - bounds.height * 0.5 * this.settings.scale.y,
-      right: this.x + bounds.width * 0.5 * this.settings.scale.x,
-      bottom: this.y + bounds.height * 0.5 * this.settings.scale.y,
-      left: this.x - bounds.width * 0.5 * this.settings.scale.x,
+      top: this.y - bounds.height * 0.5,
+      right: this.x + bounds.width * 0.5,
+      bottom: this.y + bounds.height * 0.5,
+      left: this.x - bounds.width * 0.5,
       x: this.x,
       y: this.y,
-      width: bounds.width * this.settings.scale.x,
-      height: bounds.height * this.settings.scale.y,
+      width: bounds.width,
+      height: bounds.height,
     };
   }
 
@@ -565,9 +777,9 @@ export default class Element extends Draw.Container {
    * @instance
    */
   init() {
-    return new Promise((resolve, reject) => {
-      Function.isFunction(resolve) && resolve();
-    });
+    // return new Promise((resolve, reject) => {
+    //   Function.isFunction(resolve) && resolve();
+    // });
   }
 
 

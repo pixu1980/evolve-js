@@ -7,7 +7,6 @@ import TextElement from '../Elements/TextElement';
  * @class Preloader
  * @classdesc the game preload class used for loading content
  * @public
- * @return {Promise}
  */
 export default class PreloaderElement extends Element {
   /**
@@ -63,12 +62,12 @@ export default class PreloaderElement extends Element {
   }
 
   onPreloaderAssetFileError(e) {
-    console.warn('Preloader Asset File Error', e.title);
-    console.log('Preloader Asset File Error', e);
+    console.warn('Preloader Asset File Error ', e.title);
+    console.log('Preloader Asset File Error ', e);
   }
 
   onPreloaderAssetFileLoad(e) {
-    console.log('Preloader Asset File Loaded', e);
+    // console.log('Preloader Asset File Loaded', e);
 
     this.assets.preloader[e.item.type + 's'][e.item.id] = e.result;
 
@@ -78,11 +77,11 @@ export default class PreloaderElement extends Element {
   }
 
   onPreloaderAssetsProgress(e) {
-    console.log('Preloader Assets Progress', e);
+    // console.log('Preloader Assets Progress', e);
   }
 
   onPreloaderAssetsComplete(e) {
-    console.log('Preloader Assets Complete', e);
+    // console.log('Preloader Assets Complete', e);
   }
 
   /**
@@ -93,22 +92,17 @@ export default class PreloaderElement extends Element {
      * @param {Function} resolve - resolve function of the constructor Promise
      */
   preInit(options) {
-    return super.preInit(options).then(() => {
-      return new Promise((resolve, reject) => {
-        this.preloadQueue = new Preload.LoadQueue();
-        this.preloadQueue.installPlugin(Sound.Sound);
-        this.preloadQueue.on('error', this.onPreloaderAssetFileError.bind(this));
-        this.preloadQueue.on('fileload', this.onPreloaderAssetFileLoad.bind(this));
-        this.preloadQueue.on('progress', this.onPreloaderAssetsProgress.bind(this));
+    super.preInit(options);
 
-        this.preloadQueue.on('complete', (e) => {
-          this.onPreloaderAssetsComplete(e);
-          Function.isFunction(resolve) && resolve();
-        }, this);
+    this.preloadQueue = new Preload.LoadQueue();
+    this.preloadQueue.installPlugin(Sound.Sound);
 
-        this.preloadQueue.loadManifest(this.data.manifests.preloader);
-      });
-    });
+    this.preloadQueue.on('error', this.onPreloaderAssetFileError.bind(this));
+    this.preloadQueue.on('fileload', this.onPreloaderAssetFileLoad.bind(this));
+    this.preloadQueue.on('progress', this.onPreloaderAssetsProgress.bind(this));
+    this.preloadQueue.on('complete', this.onPreloaderAssetsComplete.bind(this));
+
+    this.preloadQueue.loadManifest(this.data.manifests.preloader);
   }
 
   drawElements() {
@@ -123,57 +117,54 @@ export default class PreloaderElement extends Element {
   }
 
   onGameAssetFileError(e) {
-    console.warn('Game Asset File Error', e.title);
-    console.log('Game Asset File Error', e);
+    console.warn('Game Asset File Error ', e.title);
+    console.log('Game Asset File Error ', e);
   }
 
   onGameAssetFileLoad(e) {
-    console.log('Game Asset File Loaded', e);
-
     this.assets.game[e.item.type + 's'][e.item.id] = e.result;
 
     if (e.item.type === 'sound') {
+      console.log('sound registered ', e.item.id);
       Sound.Sound.registerSound(e.item.src, e.item.id);
     }
   }
 
   onGameAssetsProgress(e) {
-    console.log('Game Assets Progress', e);
-
     const progress = Math.round(this.loadQueue.progress * 100);
 
-    if (this.data.progress < progress && progress <= 100) {
-      this.data.progress = progress;
-      this.text.setText('Loading... ' + this.data.progress + '%');
+    if (progress <= 100) {
+      console.log('Game Assets Progress ' + progress + '%');
+
+      if (this.data.progress < progress && progress <= 100) {
+        this.data.progress = progress;
+        this.text.setText('Loading... ' + this.data.progress + '%');
+      }
     }
   }
 
   onGameAssetsComplete(e) {
-    console.log('Game Assets Complete', e);
-  }
-
-  init() {
-    return super.init().then(() => {
-      return new Promise((resolve, reject) => {
-        this.loadQueue = new Preload.LoadQueue(false);
-        this.loadQueue.installPlugin(Sound.Sound);
-        this.loadQueue.on('error', this.onGameAssetFileError.bind(this));
-        this.loadQueue.on('fileload', this.onGameAssetFileLoad.bind(this));
-        this.loadQueue.on('progress', this.onGameAssetsProgress.bind(this));
-
-        this.loadQueue.on('complete', (e) => {
-          this.onGameAssetsComplete(e);
-          Function.isFunction(resolve) && resolve();
-        }, this);
-
-
-        this.loadQueue.loadManifest(this.data.manifests.game);
-      });
+    this.dispatchEvent({
+      type: 'preloader.preloaded',
+      assets: this.assets.game,
     });
   }
 
+  init() {
+    super.init();
+
+    this.loadQueue = new Preload.LoadQueue(false);
+    this.loadQueue.installPlugin(Sound.Sound);
+
+    this.loadQueue.on('error', this.onGameAssetFileError.bind(this));
+    this.loadQueue.on('fileload', this.onGameAssetFileLoad.bind(this));
+    this.loadQueue.on('progress', this.onGameAssetsProgress.bind(this));
+    this.loadQueue.on('complete', this.onGameAssetsComplete.bind(this));
+
+    this.loadQueue.loadManifest(this.data.manifests.game);
+  }
+
   postInit() {
-    this.dispatchEvent({ type: 'preloader.preloaded', assets: this.assets.game });
   }
 
   getManifest(type = 'game') {

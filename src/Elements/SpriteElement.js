@@ -43,9 +43,15 @@ export default class SpriteElement extends Element {
     return this;
   }
 
-  preDrawElements() {
+  preDrawElement() {
     this.sprite = Helpers.createSprite(this.settings.spritesheet);
+    this.sprite.setBounds(0, 0, this.sprite.getBounds().width, this.sprite.getBounds().height);
     this.spriteBounds = this.sprite.getBounds();
+
+    this.sprite.inherit({
+      regX: this.spriteBounds.width * 0.5,
+      regY: this.spriteBounds.height * 0.5,
+    });
 
     if (!this.settings.size.force) {
       this.settings.inherit({
@@ -56,7 +62,7 @@ export default class SpriteElement extends Element {
       });
     }
 
-    return super.preDrawElements();
+    super.preDrawElement();
   }
   /**
    * draws all graphic elements of the SpriteElement instance
@@ -67,9 +73,9 @@ export default class SpriteElement extends Element {
    */
   drawElements() {
     super.drawElements();
-    
+
     this.addChild(this.sprite);
-    Helpers.align(this.sprite, null, 'center middle', true);
+    Helpers.align(this.sprite, null, 'center middle', false);
   }
 
   /**

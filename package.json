@@ -1,6 +1,6 @@
 {
   "name": "evolve-js",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "EvolveJS An Elements framework built over CreateJS",
   "main": "dist/evolve.js",
   "scripts": {
@@ -24,8 +24,8 @@
   },
   "homepage": "https://github.com/blackmirror1980/evolve-js#readme",
   "dependencies": {
-    "create-es6-js": "^0.1.4",
-    "flavor-js": "^0.3.0",
+    "create-es6-js": "^0.1.6",
+    "flavor-js": "^0.3.6",
     "lodash": "^4.17.4"
   },
   "devDependencies": {

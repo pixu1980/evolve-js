@@ -24,11 +24,12 @@ export default class TextElement extends Element {
       text: 'Text Element',
       font: '50px Arial',
       color: '#000',
-      padding: 0,
+      padding: false,
       lineHeight: false,
       maxWidth: false,
       shadow: false,
       outline: false,
+      textAlign: 'center',
     }.inherit(defaults));
   }
 
@@ -43,43 +44,51 @@ export default class TextElement extends Element {
   initSettings(options) {
     super.initSettings(options);
 
-    if(!this.settings.lineHeight) {
+    if (!this.settings.lineHeight) {
       this.settings.lineHeight = Number.parse(this.settings.font);
+    } else {
+      this.settings.lineHeight = Number.parse(this.settings.lineHeight);
     }
   }
 
   /**
    * computes the bounds based on specified text parameter
    * @memberOf TextElement
-   * @method computeBounds
+   * @method setComputedBounds
    * @instance
    */
-  computeBounds() {
+  setComputedBounds(boundsOptions = null, force = false) {
     this.textBounds = (!!this.settings.outline ? this.textOutline.getBounds() : this.text.getBounds());
 
-    if(!!this.settings.padding) {
-      if(Array.isArray(this.settings.padding)) {
-        const horizontalPadding = this.settings.padding[0];
-        const verticalPadding = this.settings.padding[1];
+    if (!!this.settings.padding) {
+      const paddingSettings = {
+        horizontal: 0,
+        vertical: 0,
+      };
 
-        if(horizontalPadding > 0) {
-          this.textBounds.inherit({
-            width: this.textBounds.width + horizontalPadding,
-          });
+      if (Number.isNumber(this.settings.padding) || Array.isArray(this.settings.padding)) {
+        let paddingArray = this.settings.padding;
+
+        if (Number.isNumber(this.settings.padding)) {
+          paddingArray = [this.settings.padding, this.settings.padding];
         }
 
-        if(verticalPadding > 0) {
-          this.textBounds.inherit({
-            height: this.textBounds.height + verticalPadding,
-          });
-        }
-      } else if(Number.isNumber(this.settings.padding)) {
-        if(this.settings.padding > 0) {
-          this.textBounds.inherit({
-            width: this.textBounds.width + this.settings.padding,
-            height: this.textBounds.height + this.settings.padding,
-          });
-        }
+        this.settings.padding = {
+          horizontal: paddingArray[0],
+          vertical: paddingArray[1],
+        };
+      }
+
+      if (this.settings.padding.horizontal > 0) {
+        this.textBounds.inherit({
+          width: this.textBounds.width + this.settings.padding.horizontal,
+        });
+      }
+
+      if (this.settings.padding.vertical > 0) {
+        this.textBounds.inherit({
+          height: this.textBounds.height + this.settings.padding.vertical,
+        });
       }
     }
 
@@ -89,32 +98,14 @@ export default class TextElement extends Element {
         height: this.textBounds.height,
       },
     });
-  }
 
-  /**
-   * centers the text inside the container
-   * @memberOf TextElement
-   * @method centerText
-   * @instance
-   */
-  centerText() {
-    if(!!this.settings.outline) {
-      this.textOutline.inherit({
-        x: this.settings.size.width * 0.5,
-        y: this.settings.lineHeight * 0.5,
-      });
-    }
-
-    this.text.inherit({
-      x: this.settings.size.width * 0.5,
-      y: this.settings.lineHeight * 0.5,
-    });
+    super.setComputedBounds(this.settings.size);
   }
 
   preDrawElement() {
-    if(!!this.settings.outline) {
+    if (!!this.settings.outline) {
       this.textOutline = Helpers.createText(this.settings.text, this.settings.font, this.settings.outline.color).inherit({
-        textAlign: 'center',
+        textAlign: this.settings.textAlign,
         textBaseline: 'middle',
         lineHeight: this.settings.lineHeight || null,
         lineWidth: this.settings.maxWidth || null,
@@ -124,20 +115,31 @@ export default class TextElement extends Element {
     }
 
     this.text = Helpers.createText(this.settings.text, this.settings.font, this.settings.color).inherit({
-      textAlign: 'center',
+      textAlign: this.settings.textAlign,
       textBaseline: 'middle',
       lineHeight: this.settings.lineHeight || null,
       lineWidth: this.settings.maxWidth || null,
       shadow: !!this.settings.shadow ? new Draw.Shadow(...this.settings.shadow) : null,
     });
 
-    this.computeBounds();
-    this.centerText();
-
-    return super.preDrawElement();
+    super.preDrawElement();
   }
 
+  setScale(scaleOptions = null, force = false) {
+    super.setScale(scaleOptions, force);
 
+    if (!!this.settings.outline) {
+      this.textOutline.inherit({
+        scaleX: this.settings.scale.x,
+        scaleY: this.settings.scale.y,
+      });
+    }
+
+    this.text.inherit({
+      scaleX: this.settings.scale.x,
+      scaleY: this.settings.scale.y,
+    });
+  }
   /**
    * draws all graphic elements of the TextElement instance
    * @memberOf TextElement
@@ -148,61 +150,54 @@ export default class TextElement extends Element {
   drawElements() {
     super.drawElements();
 
-    if(!!this.settings.outline) {
+    if (!!this.settings.outline) {
       this.addChild(this.textOutline);
-      this.setChildIndex(this.textOutline, 1);
     }
 
     this.addChild(this.text);
-    this.setChildIndex(this.text, (!!this.settings.outline ? 2 : 1));
   }
 
-  /**
-   * sets or updates the position of the TextElement instance
-   * @memberOf TextElement
-   * @method setPosition
-   * @instance
-   * @override
-   * @param {Object} position can contain x and y or only one or them
-   * @param {Number} [position.x=0] the x position
-   * @param {Number} [position.y=0] the y position
-   * @param {Boolean} [override=false] specify to override actual TextElement position
-   * @return {TextElement} to make chainable the method
-   */
-  setTextPosition(position = {x: 0, y: 0}, override = false) {
-    if(!!position.x) {
-      if(!!override) {
-        if(!!this.settings.outline) {
-          this.textOutline.x = position.x;
-        }
+  alignTextObject(text = null, mode = 'center') {
+    if (!!text) {
+      text.inherit({
+        textAlign: mode,
+      });
 
-        this.text.x = position.x;
-      } else {
-        if(!!this.settings.outline) {
-          this.textOutline.x += position.x;
-        }
+      if (mode === 'center') {
+        text.inherit({
+          x: text.getBounds().width * 0.5 * this.settings.scale.x,
+        });
+      } else if (mode === 'right') {
+        text.inherit({
+          x: text.getBounds().width * this.settings.scale.x,
+        });
+      }
 
-        this.text.x += position.x;
+      text.inherit({
+        y: this.settings.lineHeight * 0.5 * this.settings.scale.y,
+      });
+
+      if (!!this.settings.padding) {
+        text.inherit({
+          x: text.x + this.settings.padding.horizontal * 0.5 * this.settings.scale.x,
+          y: text.y + this.settings.padding.vertical * 0.5 * this.settings.scale.y,
+        });
       }
     }
+  }
 
-    if(!!position.y) {
-      if(!!override) {
-        if(!!this.settings.outline) {
-          this.textOutline.y = position.y;
-        }
-
-        this.text.y = position.y;
-      } else {
-        if(!!this.settings.outline) {
-          this.textOutline.y += position.y;
-        }
-
-        this.text.y += position.y;
-      }
+  alignText(mode = 'center') {
+    if (!!this.settings.outline) {
+      this.alignTextObject(this.textOutline, mode);
     }
 
-    return this;
+    this.alignTextObject(this.text, mode);
+  }
+
+  postDrawElement() {
+    super.postDrawElement();
+
+    this.alignText(this.settings.textAlign);
   }
 
   /**
@@ -225,7 +220,7 @@ export default class TextElement extends Element {
    * @return {TextElement} to make chainable the method
    */
   setText(text) {
-    if(!!this.settings.outline) {
+    if (!!this.settings.outline) {
       this.textOutline.text = text;
     }
 

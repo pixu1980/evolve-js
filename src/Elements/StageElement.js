@@ -1,3 +1,4 @@
+import Core from '../Core';
 import Draw from '../Draw';
 import Helpers from './Helpers';
 
@@ -14,8 +15,10 @@ export default class StageElement extends Draw.Stage {
   initDefaults() {
     this.inherit({
       defaults: {
-        domEvents: false,
-        mouseOverEvents: true,
+        enableDOMEvents: false,
+        enableMouseOverEvents: true,
+        enableTouchEvents: true,
+        enableSnapToPixel: true,
         size: {
           width: 0,
           height: 0,
@@ -35,12 +38,20 @@ export default class StageElement extends Draw.Stage {
       this.setBounds(0, 0, this.settings.size.width, this.settings.size.height);
     }
 
-    if (!!this.settings.domEvents) {
-      this.enableDOmEvents();
+    if (!!this.settings.enableDOMEvents) {
+      this.enableDOMEvents();
     }
 
-    if (!!this.settings.mouseOverEvents) {
+    if (!!this.settings.enableMouseOverEvents) {
       this.enableMouseOver();
+    }
+
+    if (!!this.settings.enableTouchEvents) {
+      Core.Touch.enable(this);
+    }
+
+    if (!!this.settings.enableSnapToPixel) {
+      this.snapToPixelEnabled = true;
     }
   }
 

@@ -118,7 +118,7 @@ export default class Helpers {
     if(horizontalModes.contains(modes)) {
       if(modes.contains('center')) {
         position.inherit({
-          x: parentBounds.width * 0.5 + (!!regPoint && !(element instanceof Draw.Bitmap) ? elementBounds.width * 0.5 : 0),
+          x: parentBounds.width * 0.5 + (!!regPoint && !(element instanceof Draw.Bitmap || element instanceof Draw.Sprite) ? elementBounds.width * 0.5 : 0),
         });
       } else if(modes.contains('left')) {
         position.inherit({
@@ -134,7 +134,7 @@ export default class Helpers {
     if(verticalModes.contains(modes)) {
       if(modes.contains('middle')) {
         position.inherit({
-          y: parentBounds.height * 0.5 + (!!regPoint && !(element instanceof Draw.Bitmap) ? elementBounds.width * 0.5 : 0),
+          y: parentBounds.height * 0.5 + (!!regPoint && !(element instanceof Draw.Bitmap || element instanceof Draw.Sprite) ? elementBounds.width * 0.5 : 0),
         });
       } else if(modes.contains('top')) {
         position.inherit({
