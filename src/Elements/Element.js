@@ -1,3 +1,4 @@
+import Anim from '../Anim';
 import Draw from '../Draw';
 import Helpers from './Helpers';
 
@@ -785,5 +786,13 @@ export default class Element extends Draw.Container {
 
   postInit() {
     //TODO:
+  }
+
+  animate(options = { override: false }, to = {}, time = 400, ease = Anim.Ease.linear) {
+    return new Promise((resolve, reject) => {
+      Anim.Tween.get(this, options).to(to, time, ease).call(() => {
+        resolve();
+      });
+    });
   }
 }
