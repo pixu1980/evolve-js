@@ -788,9 +788,9 @@ export default class Element extends Draw.Container {
     //TODO:
   }
 
-  animate(options = { override: false }, to = {}, time = 400, ease = Anim.Ease.linear) {
+  animate(options = { override: false, delay: 0 }, to = {}, time = 400, ease = Anim.Ease.linear) {
     return new Promise((resolve, reject) => {
-      Anim.Tween.get(this, options).to(to, time, ease).call(() => {
+      Anim.Tween.get(this, options).wait(options.delay).to(to, time, ease).call(() => {
         Anim.Tween.removeTweens(this);
         resolve();
       });
