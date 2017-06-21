@@ -33,7 +33,7 @@ module.exports = {
       ƒ: 'flavor-js',
       'create-es6-js': 'create-es6-js',
     }),
-    new webpack.optimize.OccurrenceOrderPlugin,
+    new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.DefinePlugin({ //<--key to reduce React's size
       'process.env': {
         'NODE_ENV': JSON.stringify('production')
