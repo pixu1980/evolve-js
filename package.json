@@ -25,8 +25,7 @@
   "homepage": "https://github.com/blackmirror1980/evolve-js#readme",
   "dependencies": {
     "create-es6-js": "^0.1.9",
-    "flavor-js": "^0.3.9",
-    "lodash": "^4.17.4"
+    "flavor-js": "^0.3.9"
   },
   "devDependencies": {
     "babel": "^6.23.0",
