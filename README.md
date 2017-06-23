@@ -1,6 +1,6 @@
 # evolve-js
 
-v0.1.18
+v0.1.19
 
 An Elements framework built over CreateJS
 
