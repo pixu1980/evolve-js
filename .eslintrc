@@ -1,5 +1,17 @@
 {
-	"extends": ["eslint-config-airbnb"],
+  "env": {
+    "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 9,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "extends": [
+    "eslint-config-airbnb"
+  ],
   "rules": {
     "object-curly-spacing": "off",
     "max-len": "off",
@@ -12,19 +24,34 @@
     "no-param-reassign": "off",
     "no-extra-boolean-cast": "off",
     "no-restricted-properties": "off",
+    "no-prototype-builtins": "off",
     "no-unused-vars": "off",
     "no-plusplus": "off",
     "no-unused-expressions": "off",
+    "no-extend-native": "off",
     "class-methods-use-this": "off",
     "one-var": "off",
     "prefer-template": "off",
-    "func-names": ["error", "never"],
+    "func-names": [
+      "error",
+      "never"
+    ],
+    "quotes": [
+      "error",
+      "single",
+      {
+        "allowTemplateLiterals": true
+      }
+    ],
     "no-console": "off",
     "spaced-comment": "off",
     "newline-per-chained-call": "off",
     "no-trailing-spaces": "off",
     "no-mixed-operators": "off",
-    "react/sort-comp": "off"
+    "indent": [
+      "error",
+      2
+    ]
   },
   "globals": {
     "window": true,
