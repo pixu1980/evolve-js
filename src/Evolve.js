@@ -1,5 +1,5 @@
 import Core from './Core/index';
-import Preload from './Preload/index';
+import { AssetsManager } from './Managers/index';
 
 /**
  * constructs Evolve class

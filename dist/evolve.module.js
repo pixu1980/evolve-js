@@ -208,3 +208,4 @@ function () {
 if (typeof module !== 'undefined') {
   module.exports = Evolve;
 }
+//# sourceMappingURL=evolve.module.js.map
