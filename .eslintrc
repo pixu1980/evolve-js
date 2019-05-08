@@ -54,7 +54,12 @@
     ]
   },
   "globals": {
+    "global": true,
     "window": true,
-    "document": true
+    "document": true,
+    "Promise": true,
+    "Image": true,
+    "Audio": true,
+    "Video": true
   }
 }

@@ -81,25 +81,25 @@ export default class AssetsManager {
     /* caricamento dei suoni */
     this.LoadSound = function (url, formats) {
       this.loading = true;
-      var sound = new Audio();
-      sound.src = url + "." + formats[0];
+      const sound = new Audio();
+      sound.src = url + '.' + formats[0];
       sound.formatIndex = 0;
       sound.volume = 0.05;
       this.resNumber++;
       sound.rh = this;
-      sound.addEventListener("canplaythrough", function () {
+      sound.addEventListener('canplaythrough', function () {
         this.rh.resLoaded++;
         this.rh.CheckLoaded();
       }, false);
-      sound.addEventListener("error", function (e) {
+      sound.addEventListener('error', function (e) {
         if (++this.formatIndex >= formats.length) {
           this.rh.errors.push([url, e.currentTarget.error.code]);
           this.rh.CheckLoaded();
         } else {
-          this.src = url + "." + formats[this.formatIndex];
+          this.src = url + '.' + formats[this.formatIndex];
         }
       });
       return sound;
-    }
+    };
   }
 }
